@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"golang_project_ecommerce/pkg/config"
 	"golang_project_ecommerce/pkg/di"
 	"golang_project_ecommerce/pkg/verification"
@@ -12,7 +11,6 @@ func main() {
 	config, configErr := config.LoadConfig()
 	verification.InitTwilio(config)
 
-	fmt.Println(config)
 	if configErr != nil {
 		log.Fatal("cannot load config: ", configErr)
 	}
