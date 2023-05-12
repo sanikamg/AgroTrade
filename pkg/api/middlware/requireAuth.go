@@ -1,6 +1,7 @@
 package middlware
 
 import (
+	"errors"
 	"golang_project_ecommerce/pkg/auth"
 	"net/http"
 	"time"
@@ -8,9 +9,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RequireAuth(c *gin.Context) {
+func AuthenticateUser(c *gin.Context) {
+	RequireAuth(c, "User_Authorization")
+}
 
-	tokenString, err := c.Cookie("User_Athorization")
+func AuthenticateAdmin(c *gin.Context) {
+	RequireAuth(c, "Admin_Authorization")
+}
+
+func RequireAuth(c *gin.Context, authname string) {
+
+	tokenString, err := c.Cookie(authname)
 	if err != nil || tokenString == " " {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"StatusCode": 401,
@@ -36,6 +45,26 @@ func RequireAuth(c *gin.Context) {
 		return
 	}
 
-	c.Set("user_id", claims["sub"])
+	c.Set("userId", claims["sub"])
 
+}
+
+func GetId(c *gin.Context, authname string) (float64, error) {
+	cookie, err := c.Request.Cookie("Admin_Authorization")
+	if err != nil {
+		return 0, errors.New("can't find cookie")
+	}
+
+	tokenString := cookie.Value
+	claims, err := auth.Validatetoken(tokenString)
+	if err != nil {
+		return 0, errors.New("can't validate cookie")
+	}
+
+	id, ok := claims["sub"].(float64)
+	if !ok {
+		return 0, errors.New("can't find id")
+	}
+
+	return id, nil
 }

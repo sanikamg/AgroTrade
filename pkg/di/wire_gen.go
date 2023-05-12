@@ -25,6 +25,12 @@ func InitializeAPI(cfg config.Config) (*http.ServerHTTP, error) {
 	userRepository := repository.NewUserRepository(gormDB)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	userHandler := handler.NewUserhandler(userUsecase)
-	serverHTTP := http.NewServerHTTP(userHandler)
+	adminRepository := repository.NewadminRepository(gormDB)
+	adminUsecase := usecase.NewadminUsecase(adminRepository)
+	adminHandler := handler.NewAdminHandler(adminUsecase)
+	productRepository := repository.NewProductRepository(gormDB)
+	productUsecase := usecase.NewProductUsecase(productRepository)
+	productHandler := handler.NewProductHandler(productUsecase)
+	serverHTTP := http.NewServerHTTP(userHandler, adminHandler, productHandler)
 	return serverHTTP, nil
 }

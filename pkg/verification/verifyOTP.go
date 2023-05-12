@@ -27,6 +27,7 @@ func SendOtp(phone string) (string, error) {
 	params := &openapi.CreateVerificationParams{}
 	params.SetTo(phone)
 	params.SetChannel("sms")
+	
 
 	_, err := client.VerifyV2.CreateVerification(VerifyServiceSid, params)
 

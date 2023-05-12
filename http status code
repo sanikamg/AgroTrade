@@ -1,0 +1,50 @@
+HTTP (Hypertext Transfer Protocol) status codes are three-digit numbers returned by servers to indicate the status of a client's request. Here is an explanation of each HTTP status code:
+
+1xx Informational:
+These status codes indicate that the server has received the request from the client, and the process is still ongoing. The client should continue to send the request until the server sends a final response.
+
+- 100 Continue: The server has received the initial part of the request and will continue to process it.
+
+- 101 Switching Protocols: The client has requested a protocol change, and the server is switching to the new protocol.
+
+2xx Success:
+These status codes indicate that the request was successfully received, understood, and accepted by the server.
+
+- 200 OK: The server has successfully fulfilled the request.
+
+- 201 Created: The request has been fulfilled, and a new resource has been created.
+
+- 204 No Content: The request was successful, but there is no response body to return.
+
+3xx Redirection:
+These status codes indicate that the client needs to take additional steps to complete the request.
+
+- 301 Moved Permanently: The requested resource has been permanently moved to a new URL.
+
+- 302 Found: The requested resource has been temporarily moved to a new URL.
+
+- 307 Temporary Redirect: The requested resource has been temporarily moved to a new URL.
+
+4xx Client Error:
+These status codes indicate that the client has made an error in the request.
+
+- 400 Bad Request: The server cannot understand the request due to invalid syntax.
+
+- 401 Unauthorized: The client must authenticate itself to get the requested response.
+
+- 403 Forbidden: The client does not have access to the requested resource.
+
+- 404 Not Found: The requested resource could not be found.
+
+5xx Server Error:
+These status codes indicate that the server encountered an error while processing the request.
+
+- 500 Internal Server Error: The server encountered an unexpected condition that prevented it from fulfilling the request.
+
+- 502 Bad Gateway: The server received an invalid response from an upstream server.
+
+- 503 Service Unavailable: The server is currently unable to handle the request due to a temporary overload or maintenance.
+
+- 504 Gateway Timeout: The server did not receive a timely response from an upstream server while trying to complete the request.
+
+These are some of the most common HTTP status codes, but there are others as well. Each status code provides information about the request/response process and can be useful in troubleshooting issues that may arise during web development.

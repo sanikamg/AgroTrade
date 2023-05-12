@@ -12,3 +12,13 @@ type LoginStruct struct {
 type OtpStruct struct {
 	OTP string `json:"otp" validate:"required,min=6,max=6"`
 }
+
+//to block user using userid
+type Block struct {
+	UserID uint `json:"user_id" binding:"required,numeric"`
+}
+
+type BlockStatus struct {
+	UserID      uint `json:"user_id" binding:"required,numeric"`
+	BlockStatus bool `json:"blockstatus"`
+}

@@ -29,6 +29,8 @@ func NewUserhandler(usecase services.UserUsecase) *UserHandler {
 
 var user domain.Users
 
+//Register or Signup
+
 func (cr *UserHandler) Register(c *gin.Context) {
 	// var user domain.Users
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -43,6 +45,9 @@ func (cr *UserHandler) Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
+
+	response := response.SuccessResponse(200, "otp send successfully", nil)
+	c.JSON(http.StatusOK, response)
 
 }
 
@@ -88,6 +93,10 @@ func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 
 }
 
+//end
+
+//userlogin
+
 func (cr *UserHandler) UserLogin(c *gin.Context) {
 	// bind body details
 	var body req.LoginStruct
@@ -112,6 +121,7 @@ func (cr *UserHandler) UserLogin(c *gin.Context) {
 
 	// check whether the user exists and login usisng usecse function
 	user, err := cr.userUsecase.Login(c, user)
+
 	message := "Successfully logged in as " + body.Username
 
 	if err != nil {
@@ -139,4 +149,32 @@ func (cr *UserHandler) UserLogin(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 
+}
+
+//user logout
+
+func (cr *UserHandler) Logout(c *gin.Context) {
+	c.SetCookie("User_Authorization", "", -1, "/ ", " ", false, true)
+	response := response.SuccessResponse(200, "successfully logged out", nil)
+	c.JSON(200, response)
+}
+
+// list all products on user side
+func (uh *UserHandler) ListProducts(c *gin.Context) {
+	var categoryname req.Categoryreq
+	if err := c.ShouldBindJSON(&categoryname); err != nil {
+		response := response.ErrorResponse(400, "Enter correct details", err.Error(), categoryname)
+		c.JSON(400, response)
+		return
+	}
+
+	products, err := uh.userUsecase.FindAllProducts(c, categoryname.CategoryName)
+	if err != nil {
+		response := response.ErrorResponse(400, "Error while fetching all products", err.Error(), products)
+		c.JSON(400, response)
+		return
+	}
+
+	response := response.SuccessResponse(200, "successfully displayed all products", products)
+	c.JSON(200, response)
 }
