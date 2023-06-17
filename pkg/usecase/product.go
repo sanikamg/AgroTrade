@@ -210,6 +210,20 @@ func (pu *ProductUsecase) RemoveProductFromCart(c context.Context, productid uin
 	return nil
 }
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>coupon>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+
+func (pu *ProductUsecase) AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error) {
+	err := pu.productRepo.FindCoupon(c, coupon)
+	if err == nil {
+		return domain.Coupon{}, err
+	}
+	couponresp, err1 := pu.productRepo.AddCoupon(c, coupon)
+	if err1 != nil {
+		return domain.Coupon{}, err1
+	}
+	return couponresp, nil
+}
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Order>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 func (pu *ProductUsecase) GetTotalAmount(c context.Context, userid uint) (float64, error) {

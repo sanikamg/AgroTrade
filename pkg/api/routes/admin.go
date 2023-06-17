@@ -52,5 +52,10 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 			user.PATCH("/blockuser", adminHandler.BlockUser)
 			user.PATCH("/unblockuser", adminHandler.UnBlockUser)
 		}
+
+		coupon := api.Group("/coupon")
+		{
+			coupon.POST("/add", productHandler.AddCoupon)
+		}
 	}
 }

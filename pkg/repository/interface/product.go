@@ -39,6 +39,10 @@ type ProductRepository interface {
 	ListCartItems(c context.Context, pagination utils.Pagination, userid int) ([]res.CartResponse, utils.Metadata, error)
 	RemoveProductFromCart(c context.Context, productid uint) error
 
+	//coupon
+	AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error)
+	FindCoupon(c context.Context, coupon domain.Coupon) error
+
 	//order
 	GetTotalAmount(c context.Context, userid int) ([]domain.Cart_item, error)
 	CreateOrder(c context.Context, order domain.Order) (res.OrderResponse, error)

@@ -512,6 +512,25 @@ func (pd *productDatabase) RemoveProductFromCart(c context.Context, productid ui
 	return nil
 }
 
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Coupon>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// add coupon
+func (pd *productDatabase) AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error) {
+	err := pd.DB.Create(&coupon).Error
+	if err != nil {
+		return domain.Coupon{}, errors.New(" failed to add coupon")
+	}
+	return coupon, nil
+}
+
+func (pd *productDatabase) FindCoupon(c context.Context, coupon domain.Coupon) error {
+	err := pd.DB.Where("coupon=?", coupon.Coupon).First(&coupon).Error
+	if err != nil {
+		return errors.New("coupon already exist")
+	}
+	return nil
+}
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>....order.....>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>......
 // get total amount
 func (pd *productDatabase) GetTotalAmount(c context.Context, userid int) ([]domain.Cart_item, error) {
