@@ -18,7 +18,7 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 	signup := api.Group("/adminsignup")
 	{
 		signup.POST("/", adminHandler.AdminSignup)
-		signup.POST("/verify_otp", adminHandler.VerifyOTP)
+		signup.GET("/verify_otp", adminHandler.VerifyOTP)
 	}
 	//logout
 	logout := api.Group("/adminlogout")
@@ -32,12 +32,18 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 		{
 			category.POST("/", productHandler.SaveCategory)
 			category.GET("/allcategory", productHandler.GetAllCategory)
+			category.DELETE("/delete", productHandler.DeleteCategory)
 		}
 
 		products := api.Group("/products")
 		{
 			products.POST("/", productHandler.SaveProduct)
 			products.DELETE("/delete", productHandler.RemoveProduct)
+			products.PATCH("/edit", productHandler.EditProduct)
+			products.POST("/addimage", productHandler.AddImage)
+			products.GET("/getallproducts", productHandler.GetAllProducts)
+			products.GET("/getallproductsbycategory", productHandler.GetAllProductsByCategory)
+			products.GET("/getproductbyid", productHandler.GetProductById)
 		}
 
 		user := api.Group("/users")

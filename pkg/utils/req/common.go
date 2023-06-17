@@ -22,3 +22,16 @@ type BlockStatus struct {
 	UserID      uint `json:"user_id" binding:"required,numeric"`
 	BlockStatus bool `json:"blockstatus"`
 }
+
+type ForgotPassword struct {
+	Phone    string `json:"phone"`
+	Password string `json:"password"`
+}
+
+type Phn struct {
+	Phone string `json:"phone"`
+}
+
+type Pass struct {
+	Password string `json:"password"`
+}

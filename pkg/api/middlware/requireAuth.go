@@ -17,6 +17,10 @@ func AuthenticateAdmin(c *gin.Context) {
 	RequireAuth(c, "Admin_Authorization")
 }
 
+func AutheticatePhn(c *gin.Context) {
+	RequireAuth(c, "Phone_Authorization")
+}
+
 func RequireAuth(c *gin.Context, authname string) {
 
 	tokenString, err := c.Cookie(authname)
@@ -49,8 +53,9 @@ func RequireAuth(c *gin.Context, authname string) {
 
 }
 
+// to fetch id from jwt
 func GetId(c *gin.Context, authname string) (float64, error) {
-	cookie, err := c.Request.Cookie("Admin_Authorization")
+	cookie, err := c.Request.Cookie(authname)
 	if err != nil {
 		return 0, errors.New("can't find cookie")
 	}
@@ -67,4 +72,24 @@ func GetId(c *gin.Context, authname string) (float64, error) {
 	}
 
 	return id, nil
+}
+
+// to fetch phone number from jwt
+func GetPhn(c *gin.Context, authname string) (string, error) {
+	cookie, err := c.Request.Cookie(authname)
+	if err != nil {
+		return " ", errors.New("can't find cookie")
+	}
+
+	tokenString := cookie.Value
+	claims, err := auth.Validatetoken(tokenString)
+	if err != nil {
+		return " ", errors.New("can't validate cookie")
+	}
+
+	phn, ok := claims["sub"].(string)
+	if !ok {
+		return " ", errors.New("can't find phn")
+	}
+	return phn, nil
 }

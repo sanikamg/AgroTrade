@@ -20,6 +20,10 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 		domain.AdminDetails{},
 		domain.ProductDetails{},
 		domain.Category{},
+		domain.Image{},
+		domain.Address{},
+		domain.Cart_item{},
+		domain.Order{},
 	); err != nil {
 		return nil, err
 	}

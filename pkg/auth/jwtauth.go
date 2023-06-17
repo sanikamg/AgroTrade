@@ -50,3 +50,22 @@ func Validatetoken(tokenString string) (jwt.MapClaims, error) {
 
 	return claims, nil
 }
+
+// sub as phone number
+func GenerateJWTPhn(phn string) (map[string]string, error) {
+
+	// Create a new token object, specifying signing method and the claims
+	// you would like it to contain.
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": phn,
+		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+	})
+
+	// Sign and get the complete encoded token as a string using the secret
+	tokenString, err := token.SignedString([]byte(config.GetJWTConfig()))
+
+	if err != nil {
+		return nil, errors.New("JWT token generating is failed")
+	}
+	return map[string]string{"accessToken": tokenString}, nil
+}

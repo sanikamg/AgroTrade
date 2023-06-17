@@ -5,6 +5,7 @@ import (
 	"errors"
 	"golang_project_ecommerce/pkg/domain"
 	interfaces "golang_project_ecommerce/pkg/repository/interface"
+	"golang_project_ecommerce/pkg/utils"
 	"golang_project_ecommerce/pkg/utils/req"
 	"golang_project_ecommerce/pkg/utils/res"
 
@@ -41,13 +42,28 @@ func (ad *adminDatabase) AddAdmin(c context.Context, admin domain.AdminDetails) 
 }
 
 // for finding allusers
-func (ad *adminDatabase) FindAll(c context.Context) ([]res.AllUsers, error) {
+func (ad *adminDatabase) FindAllUsers(c context.Context, pagination utils.Pagination) ([]res.AllUsers, utils.Metadata, error) {
 	var users []res.AllUsers
-	err := ad.DB.Raw("select user_id as id,username,name,phone,email from users").Scan(&users).Error
-	if err != nil {
-		return []res.AllUsers{}, errors.New("failed to find all users")
+	var totalrecords int64
+
+	db := ad.DB.Model(&domain.Users{})
+
+	//count all records
+	if err := db.Count(&totalrecords).Error; err != nil {
+		return []res.AllUsers{}, utils.Metadata{}, err
 	}
-	return users, nil
+
+	// Apply pagination
+	//db = db.Limit(pagination.Limit()).Offset(pagination.Offset())
+
+	err := db.Raw("select user_id as id,username,name,phone,email from users LIMIT $1 OFFSET $2", pagination.Limit(), pagination.Offset()).Scan(&users).Error
+	if err != nil {
+		return []res.AllUsers{}, utils.Metadata{}, errors.New("failed to find all users")
+	}
+	// Compute metadata
+	metadata := utils.ComputeMetadata(&totalrecords, &pagination.Page, &pagination.PageSize)
+
+	return users, metadata, nil
 
 }
 

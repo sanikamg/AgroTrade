@@ -5,8 +5,10 @@ import (
 	"golang_project_ecommerce/pkg/common/response"
 	"golang_project_ecommerce/pkg/domain"
 	services "golang_project_ecommerce/pkg/usecase/interface"
+	"golang_project_ecommerce/pkg/utils"
 	"golang_project_ecommerce/pkg/utils/req"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,18 +46,24 @@ func (ph ProductHandler) SaveCategory(c *gin.Context) {
 }
 
 func (ph ProductHandler) GetAllCategory(c *gin.Context) {
-	categories, err := ph.productUsecase.DisplayAllCategory(c)
+	page, _ := strconv.Atoi(c.Query("page"))
+	pagesize, _ := strconv.Atoi(c.Query("pagesize"))
+	pagination := utils.Pagination{
+		Page:     page,
+		PageSize: pagesize,
+	}
+	categories, metadata, err := ph.productUsecase.DisplayAllCategory(c, pagination)
 	if err != nil {
 		res := response.ErrorResponse(400, "can't find all categories", err.Error(), nil)
 
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
-	response := response.SuccessResponse(200, "successfully got all cateogries", categories)
+	response := response.SuccessResponse(200, "successfully got all cateogries", categories, metadata)
 	c.JSON(http.StatusOK, response)
 }
 
-//product
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>product>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 func (ph *ProductHandler) SaveProduct(c *gin.Context) {
 	var product domain.ProductDetails
@@ -117,5 +125,157 @@ func (ph *ProductHandler) RemoveProduct(c *gin.Context) {
 		return
 	}
 	response := response.SuccessResponse(200, "successfully deleted product", product)
+	c.JSON(200, response)
+}
+
+func (ph *ProductHandler) EditProduct(c *gin.Context) {
+	var productup req.UpdateProduct
+
+	if err := c.ShouldBindJSON(&productup); err != nil {
+		response := response.ErrorResponse(400, "enter valid details", err.Error(), productup)
+		c.JSON(400, response)
+		return
+	}
+
+	product, err := ph.productUsecase.UpdateProduct(c, productup)
+	if err != nil {
+		response := response.ErrorResponse(400, "can't update product", err.Error(), productup)
+		c.JSON(400, response)
+		return
+	}
+	response := response.SuccessResponse(200, "successfully updated  product", product)
+	c.JSON(200, response)
+}
+
+func (ph *ProductHandler) DeleteCategory(c *gin.Context) {
+	var deletecat req.DeleteCategory
+
+	if err := c.ShouldBindJSON(&deletecat); err != nil {
+		response := response.ErrorResponse(400, "Enter valid category name", err.Error(), deletecat)
+		c.JSON(400, response)
+		return
+	}
+
+	err := ph.productUsecase.DeleteCategory(c, deletecat.CategoryName)
+	if err != nil {
+		response := response.ErrorResponse(400, "can't delete category", err.Error(), deletecat)
+		c.JSON(400, response)
+		return
+	}
+	response := response.SuccessResponse(200, "successfully delete category", deletecat)
+	c.JSON(200, response)
+}
+
+//>>>>>>>>>>>>>>>>>>add image>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+func (ph *ProductHandler) AddImage(c *gin.Context) {
+
+	pid, err := strconv.Atoi(c.PostForm("product_id"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Error while fetching product_id", err.Error(), pid)
+		c.JSON(400, response)
+		return
+	}
+
+	form, err := c.MultipartForm()
+
+	if err != nil {
+		response := response.ErrorResponse(400, "Error while fetching image file", err.Error(), form)
+		c.JSON(400, response)
+		return
+	}
+	files := form.File["image"]
+	if len(files) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No image files found"})
+		return
+	}
+
+	Images, err := ph.productUsecase.AddImage(c, pid, files)
+	if err != nil {
+		response := response.ErrorResponse(400, "Can't be add images", err.Error(), Images)
+		c.JSON(400, response)
+		return
+	}
+
+	response := response.SuccessResponse(200, "successfully added images", Images)
+	c.JSON(200, response)
+}
+
+// >>>>>>>>>>>>>>>>>>>>>Get All Products >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+func (ph *ProductHandler) GetAllProducts(c *gin.Context) {
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add page number as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagesize, err := strconv.Atoi(c.Query("pagesize"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add pages size as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagination := utils.Pagination{
+		Page:     page,
+		PageSize: pagesize,
+	}
+	product, metadata, err := ph.productUsecase.FindAllProducts(c, pagination)
+	if err != nil {
+		response := response.ErrorResponse(400, "error while finding products", err.Error(), product)
+		c.JSON(400, response)
+	}
+	response := response.SuccessResponse(200, "successfully displayed all products", product, metadata)
+	c.JSON(200, response)
+}
+
+func (ph *ProductHandler) GetAllProductsByCategory(c *gin.Context) {
+	category := c.Query("category")
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add page number as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagesize, err := strconv.Atoi(c.Query("pagesize"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add pages size as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagination := utils.Pagination{
+		Page:     page,
+		PageSize: pagesize,
+	}
+	product, metadata, err := ph.productUsecase.FindAllProductsByCategory(c, pagination, category)
+	if err != nil {
+		response := response.ErrorResponse(400, "error while finding products", err.Error(), product)
+		c.JSON(400, response)
+	}
+	response := response.SuccessResponse(200, "successfully displayed all products", product, metadata)
+	c.JSON(200, response)
+}
+
+func (ph *ProductHandler) GetProductById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Query("id"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add id as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add page number as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagesize, err := strconv.Atoi(c.Query("pagesize"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add pages size as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagination := utils.Pagination{
+		Page:     page,
+		PageSize: pagesize,
+	}
+	product, metadata, err := ph.productUsecase.FindProductsById(c, pagination, id)
+	if err != nil {
+		response := response.ErrorResponse(400, "error while finding products", err.Error(), product)
+		c.JSON(400, response)
+	}
+	response := response.SuccessResponse(200, "successfully displayed all products", product, metadata)
 	c.JSON(200, response)
 }

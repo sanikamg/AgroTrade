@@ -2,7 +2,6 @@ package verification
 
 import (
 	"errors"
-	"fmt"
 	"golang_project_ecommerce/pkg/config"
 
 	"github.com/twilio/twilio-go"
@@ -23,14 +22,12 @@ func InitTwilio(cn config.Config) {
 }
 
 func SendOtp(phone string) (string, error) {
-	fmt.Println(phone)
+
 	params := &openapi.CreateVerificationParams{}
 	params.SetTo(phone)
 	params.SetChannel("sms")
-	
 
 	_, err := client.VerifyV2.CreateVerification(VerifyServiceSid, params)
-
 	if err != nil {
 		return "Error while sending otp", err
 	}
@@ -47,8 +44,9 @@ func VerifyOtp(phone string, code string) error {
 	params.SetCode(code)
 
 	resp, err := client.VerifyV2.CreateVerificationCheck(VerifyServiceSid, params)
+
 	if err != nil {
-		fmt.Println("1st", err)
+
 		return err
 
 	} else if *resp.Status == "approved" {

@@ -10,6 +10,7 @@ import (
 	"golang_project_ecommerce/pkg/utils/req"
 	"golang_project_ecommerce/pkg/verification"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,23 +47,25 @@ func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 
 func (ad *AdminHandler) VerifyOTP(c *gin.Context) {
 	//bind body details
-	var body req.OtpStruct
-	if err := c.ShouldBindJSON(&body); err != nil {
-		res := response.ErrorResponse(400, "error while getting otp from user", err.Error(), nil)
-		utils.ResponseJSON(c, res)
-		return
-	}
+	//bind body details
+	phonenumber := c.Query("phone")
+	code := c.Query("code")
+	// var body req.OtpStruct
+	// if err := c.ShouldBindJSON(&body); err != nil {
+	// 	res := response.ErrorResponse(400, "error while getting otp from user", err.Error(), nil)
+	// 	utils.ResponseJSON(c, res)
+	// 	return
+	// }
 
-	if body.OTP == " " {
+	if phonenumber == " " || code == " " {
 		err := errors.New("please enter otp")
 		res := response.ErrorResponse(400, "invalid otp", err.Error(), nil)
 		utils.ResponseJSON(c, res)
 		return
 	}
-
 	// verifying otp
 
-	err := verification.VerifyOtp("+91"+admin.Phone, body.OTP)
+	err := verification.VerifyOtp("+91"+phonenumber, code)
 
 	if err != nil {
 		res := response.ErrorResponse(400, "error while verifying otp", err.Error(), nil)
@@ -146,13 +149,27 @@ func (ad *AdminHandler) AdminLogin(c *gin.Context) {
 // to display all users in admin side
 
 func (ad *AdminHandler) GetAllUsers(c *gin.Context) {
-	users, err := ad.AdminUsecase.FindAllUsers(c)
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add page number as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagesize, err := strconv.Atoi(c.Query("pagesize"))
+	if err != nil {
+		response := response.ErrorResponse(400, "Please add pages size as params", err.Error(), "")
+		c.JSON(400, response)
+	}
+	pagination := utils.Pagination{
+		Page:     page,
+		PageSize: pagesize,
+	}
+	users, metadata, err := ad.AdminUsecase.FindAllUsers(c, pagination)
 	if err != nil {
 		response := response.ErrorResponse(400, "error while finding all users", err.Error(), nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	response := response.SuccessResponse(200, "successfully displaying all users", nil, users)
+	response := response.SuccessResponse(200, "successfully displaying all users", users, metadata)
 	c.JSON(http.StatusOK, response)
 }
 

@@ -3,10 +3,10 @@ package usecase
 import (
 	"context"
 	"errors"
-	"fmt"
 	"golang_project_ecommerce/pkg/domain"
 	interfaces "golang_project_ecommerce/pkg/repository/interface"
 	ser "golang_project_ecommerce/pkg/usecase/interface"
+	"golang_project_ecommerce/pkg/utils"
 	"golang_project_ecommerce/pkg/utils/req"
 	"golang_project_ecommerce/pkg/utils/res"
 
@@ -36,7 +36,7 @@ func (ad *AdminUsecase) AdminSignup(c context.Context, admin domain.AdminDetails
 		return domain.AdminDetails{}, errors.New("error while hashing")
 	}
 	admin.Password = string(hash)
-	fmt.Println(admin)
+
 	ad.adminRepo.AddAdmin(c, admin)
 
 	return admin, nil
@@ -60,12 +60,12 @@ func (ad *AdminUsecase) AdminLogin(ctx context.Context, admin domain.AdminDetail
 	}
 	return nil
 }
-func (ad *AdminUsecase) FindAllUsers(c context.Context) ([]res.AllUsers, error) {
-	users, err := ad.adminRepo.FindAll(c)
+func (ad *AdminUsecase) FindAllUsers(c context.Context, pagination utils.Pagination) ([]res.AllUsers, utils.Metadata, error) {
+	users, metadata, err := ad.adminRepo.FindAllUsers(c, pagination)
 	if err != nil {
-		return []res.AllUsers{}, errors.New("error while finding all users")
+		return []res.AllUsers{}, utils.Metadata{}, errors.New("error while finding all users")
 	}
-	return users, nil
+	return users, metadata, nil
 }
 
 // to block an user
