@@ -1,8 +1,12 @@
 package domain
 
-import "gorm.io/gorm"
+import (
+	"time"
 
-//sample product model
+	"gorm.io/gorm"
+)
+
+// sample product model
 type ProductDetails struct {
 	gorm.Model
 	Product_Id      uint     `gorm:"serial primarykey;autoIncrement:true;unique"`
@@ -27,11 +31,6 @@ type Image struct {
 	Image     string `JSON:"Image" `
 }
 
-type ProductWithImage struct {
-	ProductDetails ProductDetails
-	Image          Image
-}
-
 // cart
 
 type Cart_item struct {
@@ -42,7 +41,7 @@ type Cart_item struct {
 	Total_Price float32 `json:"total_price"`
 }
 
-//order
+// order
 type Order struct {
 	Order_Id uint ` gorm:" serial primaryKey;autoIncrement:true;unique"`
 	User_Id  uint `json:"user_id"  gorm:"not null" `
@@ -58,11 +57,22 @@ type Order struct {
 	Address_Id   uint   `json:"address_id" `
 }
 
+type PaymentMethod struct {
+	COD bool
+}
+
+//coupon
+
+type Coupon struct {
+	Created_At time.Time
+	Coupon_Id  uint   `gorm:"serial primaryKey;autoIncrement:true;unique"`
+	Coupon     string `json:"coupon"`
+	Discount   int    `json:"discount"`
+	Quantity   int    `json:"quantity"`
+	Validity   int64  `json:"validity"`
+}
+
 type Applied_Coupons struct {
 	UserID      uint
 	Coupon_Code string `json:"coupon_code"`
-}
-
-type PaymentMethod struct {
-	COD bool
 }

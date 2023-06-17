@@ -8,7 +8,7 @@ These status codes indicate that the server has received the request from the cl
 - 101 Switching Protocols: The client has requested a protocol change, and the server is switching to the new protocol.
 
 2xx Success:
-These status codes indicate that the request was successfully received, understood, and accepted by the server.
+These status codes indicate that the request wa
 
 - 200 OK: The server has successfully fulfilled the request.
 
