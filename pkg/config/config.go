@@ -29,7 +29,7 @@ func LoadConfig() (Config, error) {
 	//viper.AddConfigPath("./")
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("C:/My programs/Golang_Project_Ecommerce/")
+	viper.AddConfigPath("/media/user/OS/My programs/Golang_Project_Ecommerce/")
 
 	// Read in the configuration file
 	err := viper.ReadInConfig()

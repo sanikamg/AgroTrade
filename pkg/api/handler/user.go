@@ -175,7 +175,7 @@ func (cr *UserHandler) UserLogin(c *gin.Context) {
 	//set cookie
 
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("User_Authorization", tokenString["accessToken"], 3600*24*30, "/", " ", false, true)
+	c.SetCookie("User_Authorization", tokenString["accessToken"], 3600*24*30, "/", "", true, true)
 
 	response := response.SuccessResponse(200, "Successfully logged in", message)
 
@@ -448,6 +448,7 @@ func (ur *UserHandler) ForgotPassword(c *gin.Context) {
 		return
 	}
 
+	c.SetCookie("Phone_Authorization", "", -1, " /", " ", false, true)
 	response := response.SuccessResponse(200, "successsfully updated password please login")
 	c.JSON(200, response)
 

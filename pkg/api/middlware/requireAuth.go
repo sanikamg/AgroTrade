@@ -2,6 +2,7 @@ package middlware
 
 import (
 	"errors"
+	"fmt"
 	"golang_project_ecommerce/pkg/auth"
 	"net/http"
 	"time"
@@ -22,12 +23,15 @@ func AutheticatePhn(c *gin.Context) {
 }
 
 func RequireAuth(c *gin.Context, authname string) {
-
+	fmt.Println(authname)
 	tokenString, err := c.Cookie(authname)
+	fmt.Println(tokenString)
+
 	if err != nil || tokenString == " " {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"StatusCode": 401,
 			"msg":        "Error while fetching cookie",
+			"error":      err,
 		})
 		return
 	}

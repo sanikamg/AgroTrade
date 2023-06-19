@@ -104,7 +104,7 @@ func (pu *ProductUsecase) DeleteProduct(c context.Context, productid uint) error
 }
 
 func (pu ProductUsecase) UpdateProduct(c context.Context, productup req.UpdateProduct) (domain.ProductDetails, error) {
-	err := pu.productRepo.FindProductByName(c, productup.ProductName)
+	err := pu.productRepo.FindProductById(c, productup.ProductId)
 	if err != nil {
 		return domain.ProductDetails{}, errors.New("please add product,product doesn't exist")
 	}

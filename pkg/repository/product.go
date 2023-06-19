@@ -155,8 +155,8 @@ func (pd *productDatabase) DeleteProduct(c context.Context, productid uint) erro
 
 func (pd *productDatabase) UpdateProduct(c context.Context, productup req.UpdateProduct) (domain.ProductDetails, error) {
 	var product domain.ProductDetails
-	query := `update product_details set product_name=?, product_price=?,product_quantity=? where product_id=? `
-	err := pd.DB.Raw(query, productup.ProductName, productup.ProductPrice, productup.ProductQuantity, productup.ProductId).Scan(&product).Error
+	query := `update product_details set product_name=?, product_price=?,product_quantity=?,category_id=? where product_id=? `
+	err := pd.DB.Raw(query, productup.ProductName, productup.ProductPrice, productup.ProductQuantity, productup.Categoryid, productup.ProductId).Scan(&product).Error
 	if err != nil {
 		return domain.ProductDetails{}, errors.New("failed to update product details")
 	}

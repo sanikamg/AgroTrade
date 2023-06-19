@@ -32,14 +32,6 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 		forgotpass.POST("/", userHandler.SendOtpForgotPass)
 	}
 	//authentication of forgot password
-	api.Use(middlware.AutheticatePhn)
-	{
-		forgotverification := api.Group("/forgot")
-		{
-			forgotverification.POST("/otpverification", userHandler.VerifyOTPForgotPass)
-			forgotverification.POST("/newpass", userHandler.ForgotPassword)
-		}
-	}
 
 	api.Use(middlware.AuthenticateUser)
 	{
@@ -74,6 +66,15 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 		{
 			Order.POST("/create", productHandler.CreateOrder)
 			Order.POST("/payment", productHandler.PlaceOrder)
+		}
+	}
+
+	api.Use(middlware.AutheticatePhn)
+	{
+		forgotverification := api.Group("/forgot")
+		{
+			forgotverification.POST("/otpverification", userHandler.VerifyOTPForgotPass)
+			forgotverification.POST("/newpass", userHandler.ForgotPassword)
 		}
 	}
 }
