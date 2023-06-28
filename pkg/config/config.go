@@ -6,19 +6,24 @@ import (
 )
 
 type Config struct {
-	DBHost           string `mapstructure:"DB_HOST"`
-	DBName           string `mapstructure:"DB_NAME"`
-	DBUser           string `mapstructure:"DB_USER"`
-	DBPort           string `mapstructure:"DB_PORT"`
-	DBPassword       string `mapstructure:"DB_PASSWORD"`
-	JWT              string `mapstructure:"JWT_CODE"`
+	DBHost     string `mapstructure:"DB_HOST"`
+	DBName     string `mapstructure:"DB_NAME"`
+	DBUser     string `mapstructure:"DB_USER"`
+	DBPort     string `mapstructure:"DB_PORT"`
+	DBPassword string `mapstructure:"DB_PASSWORD"`
+
+	JWT string `mapstructure:"JWT_CODE"`
+
 	AccountSid       string `mapstructure:"ACCOUNT_SID"`
 	AuthToken        string `mapstructure:"AUTH_TOKEN"`
 	VerifyServiceSid string `mapstructure:"VERIFY_SERVICE_ID"`
+
+	RazorPayKey    string `mapstructure:"RAZOR_PAY_KEY"`
+	RazorPaySecret string `mapstructure:"RAZOR_PAY_SECRET"`
 }
 
 var envs = []string{
-	"DB_HOST", "DB_NAME", "DB_USER", "DB_PORT", "DB_PASSWORD", "JWT_CODE", "ACCOUNT_SID", "AUTH_TOKEN", "VERIFY_SERVICE_ID",
+	"DB_HOST", "DB_NAME", "DB_USER", "DB_PORT", "DB_PASSWORD", "JWT_CODE", "ACCOUNT_SID", "AUTH_TOKEN", "VERIFY_SERVICE_ID", "RAZOR_PAY_KEY", "RAZOR_PAY_SECRET",
 }
 
 var config Config
@@ -29,7 +34,7 @@ func LoadConfig() (Config, error) {
 	//viper.AddConfigPath("./")
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("/media/user/OS/My programs/Golang_Project_Ecommerce/")
+	viper.AddConfigPath("/home/user/Documents/Project/AgroTrade")
 
 	// Read in the configuration file
 	err := viper.ReadInConfig()
@@ -68,4 +73,9 @@ func GetJWTConfig() string {
 func GetTwilioconfig() (string, string, string) {
 	return config.AccountSid, config.AuthToken, config.VerifyServiceSid
 
+}
+
+func GetRazorPayConfig() (string, string) {
+
+	return config.RazorPayKey, config.RazorPaySecret
 }

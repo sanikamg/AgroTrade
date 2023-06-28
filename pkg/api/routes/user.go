@@ -65,7 +65,11 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 		Order := api.Group("/order")
 		{
 			Order.POST("/create", productHandler.CreateOrder)
-			Order.POST("/payment", productHandler.PlaceOrder)
+			Order.PATCH("/update", productHandler.UpdateOrder)
+			Order.GET("/list", productHandler.ListAllOrders)
+			Order.DELETE("/cancel", productHandler.CancelOrder)
+			Order.POST("/applycoupon", productHandler.PlaceOrder)
+			Order.POST("/payment", productHandler.CheckOut)
 		}
 	}
 

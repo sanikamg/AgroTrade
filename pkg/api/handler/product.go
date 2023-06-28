@@ -232,11 +232,13 @@ func (ph *ProductHandler) GetAllProductsByCategory(c *gin.Context) {
 	if err != nil {
 		response := response.ErrorResponse(400, "Please add page number as params", err.Error(), "")
 		c.JSON(400, response)
+		return
 	}
 	pagesize, err := strconv.Atoi(c.Query("pagesize"))
 	if err != nil {
 		response := response.ErrorResponse(400, "Please add pages size as params", err.Error(), "")
 		c.JSON(400, response)
+		return
 	}
 	pagination := utils.Pagination{
 		Page:     page,
@@ -246,6 +248,7 @@ func (ph *ProductHandler) GetAllProductsByCategory(c *gin.Context) {
 	if err != nil {
 		response := response.ErrorResponse(400, "error while finding products", err.Error(), product)
 		c.JSON(400, response)
+		return
 	}
 	response := response.SuccessResponse(200, "successfully displayed all products", product, metadata)
 	c.JSON(200, response)
@@ -256,16 +259,19 @@ func (ph *ProductHandler) GetProductById(c *gin.Context) {
 	if err != nil {
 		response := response.ErrorResponse(400, "Please add id as params", err.Error(), "")
 		c.JSON(400, response)
+		return
 	}
 	page, err := strconv.Atoi(c.Query("page"))
 	if err != nil {
 		response := response.ErrorResponse(400, "Please add page number as params", err.Error(), "")
 		c.JSON(400, response)
+		return
 	}
 	pagesize, err := strconv.Atoi(c.Query("pagesize"))
 	if err != nil {
 		response := response.ErrorResponse(400, "Please add pages size as params", err.Error(), "")
 		c.JSON(400, response)
+		return
 	}
 	pagination := utils.Pagination{
 		Page:     page,
@@ -275,6 +281,7 @@ func (ph *ProductHandler) GetProductById(c *gin.Context) {
 	if err != nil {
 		response := response.ErrorResponse(400, "error while finding products", err.Error(), product)
 		c.JSON(400, response)
+		return
 	}
 	response := response.SuccessResponse(200, "successfully displayed all products", product, metadata)
 	c.JSON(200, response)

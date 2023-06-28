@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"fmt"
 	"golang_project_ecommerce/pkg/domain"
 	interfaces "golang_project_ecommerce/pkg/repository/interface"
 	"golang_project_ecommerce/pkg/utils"
@@ -352,6 +353,7 @@ func (pd *productDatabase) FindAllProductsByCategory(c context.Context, paginati
 		product.Image = images
 		products = append(products, product)
 	}
+	fmt.Println(products)
 
 	// Compute metadata
 	metadata := utils.ComputeMetadata(&totalRecords, &pagination.Page, &pagination.PageSize)
@@ -516,11 +518,14 @@ func (pd *productDatabase) RemoveProductFromCart(c context.Context, productid ui
 
 // add coupon
 func (pd *productDatabase) AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error) {
+	fmt.Println(coupon)
 	err := pd.DB.Create(&coupon).Error
 	if err != nil {
 		return domain.Coupon{}, errors.New(" failed to add coupon")
 	}
+
 	return coupon, nil
+
 }
 
 func (pd *productDatabase) FindCoupon(c context.Context, coupon domain.Coupon) error {
@@ -529,6 +534,80 @@ func (pd *productDatabase) FindCoupon(c context.Context, coupon domain.Coupon) e
 		return errors.New("coupon already exist")
 	}
 	return nil
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>paymentmethod>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+func (pd *productDatabase) AddPaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error) {
+	err := pd.DB.Create(&payment).Error
+	if err != nil {
+		return domain.PaymentMethod{}, errors.New("failed to add payment method")
+	}
+	return payment, nil
+}
+
+func (pd *productDatabase) FindPaymentMethod(c context.Context, payment domain.PaymentMethod) error {
+	var payment_methods domain.PaymentMethod
+	err := pd.DB.Raw("SELECT * FROM payment_methods WHERE payment_method=?", payment.PaymentMethod).First(&payment_methods).Error
+	if err != nil {
+
+		return errors.New("failed to find payment method")
+	}
+	return nil
+}
+
+func (pd *productDatabase) FindPaymentMethodId(c context.Context, method_id uint) (uint, error) {
+	var payment_methods domain.PaymentMethod
+	err := pd.DB.Raw("SELECT * FROM payment_methods WHERE method_id=?", method_id).First(&payment_methods).Error
+	if err != nil {
+
+		return 0, errors.New("failed to find payment method")
+	}
+	return payment_methods.Method_id, nil
+}
+
+func (pd *productDatabase) GetPaymentMethods(c context.Context, pagination utils.Pagination) ([]res.PaymentMethodResponse, utils.Metadata, error) {
+	var payments []res.PaymentMethodResponse
+
+	var totalRecords int64
+
+	db := pd.DB.Model(&domain.PaymentMethod{})
+
+	// Count all records
+	if err := db.Count(&totalRecords).Error; err != nil {
+		return []res.PaymentMethodResponse{}, utils.Metadata{}, err
+	}
+
+	query := `select *from payment_methods limit $1 offset $2;`
+
+	err := db.Raw(query, pagination.Limit(), pagination.Offset()).Scan(&payments).Error
+	if err != nil {
+		return []res.PaymentMethodResponse{}, utils.Metadata{}, errors.New("query didn't work")
+	}
+	// Compute metadata
+	metadata := utils.ComputeMetadata(&totalRecords, &pagination.Page, &pagination.PageSize)
+
+	return payments, metadata, nil
+}
+
+func (pd *productDatabase) UpdatePaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error) {
+
+	query := `update payment_methods set maximum_amount=?,payment_method=? where method_id=?`
+	err := pd.DB.Raw(query, payment.MaximumAmount, payment.PaymentMethod, payment.Method_id).Scan(&payment).Error
+	if err != nil {
+		return domain.PaymentMethod{}, errors.New("failed to update payment method details")
+	}
+	return payment, nil
+}
+
+func (pu *productDatabase) DeleteMethod(c context.Context, id uint) error {
+	var paymentmethod domain.PaymentMethod
+	query := `delete from payment_methods where method_id=?`
+	err := pu.DB.Raw(query, id).Scan(&paymentmethod).Error
+	if err != nil {
+		return errors.New("failed to delete payment method")
+	}
+	return nil
+
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>....order.....>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>......
@@ -551,7 +630,7 @@ func (pd *productDatabase) CreateOrder(c context.Context, order domain.Order) (r
 		return res.OrderResponse{}, errors.New("failed to place order")
 	}
 
-	query := `select total_amount,order_status,address_id from orders where order_id=?`
+	query := `select o.total_amount,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
 	err1 := pd.DB.Raw(query, order.Order_Id).Scan(&orderdetails).Error
 	if err1 != nil {
 		return res.OrderResponse{}, errors.New("failed to display order details")
@@ -559,15 +638,87 @@ func (pd *productDatabase) CreateOrder(c context.Context, order domain.Order) (r
 	return orderdetails, nil
 }
 
+func (pd *productDatabase) UpdateOrderDetails(c context.Context, uporder req.UpdateOrder) (res.OrderResponse, error) {
+	var order domain.Order
+	var orderdetails res.OrderResponse
+	query := `update orders set payment_method_id=?,address_id=? where order_id=?`
+	err := pd.DB.Raw(query, uporder.PaymentMethodID, uporder.Address_Id, uporder.Order_Id).Scan(&order).Error
+	if err != nil {
+		return res.OrderResponse{}, errors.New("Error while updating order deatails")
+	}
+	query1 := `select o.total_amount,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
+	err1 := pd.DB.Raw(query1, uporder.Order_Id).Scan(&orderdetails).Error
+	if err1 != nil {
+		return res.OrderResponse{}, errors.New("failed to display order details")
+	}
+	return orderdetails, nil
+}
+
+func (pd *productDatabase) ListAllOrders(c context.Context, pagination utils.Pagination, usrid uint) ([]res.OrderResponse, utils.Metadata, error) {
+	var orders []res.OrderResponse
+	var totalRecords int64
+
+	db := pd.DB.Model(&domain.Order{})
+
+	// Count all records
+	if err := db.Count(&totalRecords).Error; err != nil {
+		return []res.OrderResponse{}, utils.Metadata{}, err
+	}
+
+	query := `select o.total_amount,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where user_id=$1 limit $2 offset $3;`
+
+	err := db.Raw(query, usrid, pagination.Limit(), pagination.Offset()).Scan(&orders).Error
+	if err != nil {
+		return []res.OrderResponse{}, utils.Metadata{}, errors.New("query didn't work")
+	}
+	// Compute metadata
+	metadata := utils.ComputeMetadata(&totalRecords, &pagination.Page, &pagination.PageSize)
+
+	return orders, metadata, nil
+}
+
+func (pd *productDatabase) GetAllOrders(c context.Context, pagination utils.Pagination) ([]res.OrderResponse, utils.Metadata, error) {
+	var orders []res.OrderResponse
+	var totalRecords int64
+
+	db := pd.DB.Model(&domain.Order{})
+
+	// Count all records
+	if err := db.Count(&totalRecords).Error; err != nil {
+		return []res.OrderResponse{}, utils.Metadata{}, err
+	}
+
+	query := `select o.total_amount,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id limit $1 offset $2;`
+
+	err := db.Raw(query, pagination.Limit(), pagination.Offset()).Scan(&orders).Error
+	if err != nil {
+		return []res.OrderResponse{}, utils.Metadata{}, errors.New("query didn't work")
+	}
+	// Compute metadata
+	metadata := utils.ComputeMetadata(&totalRecords, &pagination.Page, &pagination.PageSize)
+
+	return orders, metadata, nil
+}
+
+func (pd *productDatabase) DeleteOrder(c context.Context, order_id uint) error {
+	var order domain.Order
+	err := pd.DB.Where("order_id=?").Delete(&order)
+	if err != nil {
+		return errors.New("faileed to delete orders")
+
+	}
+	return nil
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>checkout>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 func (pd *productDatabase) PlaceOrder(c context.Context, order domain.Order) (res.PaymentResponse, error) {
 	var paymentresp res.PaymentResponse
-	query := `update orders set payment_method=?,payment_status=?,order_status=? where order_id=?`
-	err := pd.DB.Raw(query, order.PaymentMethod, order.Payment_Status, order.Order_Status, order.Order_Id).Scan(&order).Error
+	query := `update orders set total_amount=? where order_id=?`
+	err := pd.DB.Raw(query, order.Total_Amount, order.Order_Id).Scan(&order).Error
 	if err != nil {
 		return res.PaymentResponse{}, errors.New("failed to update payment")
 	}
-
-	query1 := `select total_amount,order_status,address_id,payment_method,payment_status from orders where order_id=?`
+	query1 := `select total_amount,order_status,address_id,payment_method_id,payment_status from orders where order_id=?`
 	err1 := pd.DB.Raw(query1, order.Order_Id).Scan(&paymentresp).Error
 	if err1 != nil {
 		return res.PaymentResponse{}, errors.New("failed to display order details")
@@ -576,9 +727,77 @@ func (pd *productDatabase) PlaceOrder(c context.Context, order domain.Order) (re
 	return paymentresp, nil
 }
 
-// func(pd *productDatabase)ListOrders(c context.Context,userid uint)(res.OrderedItems,error){
-// 	var ordered_items []res.OrderedItems
-// 	query:=`select o.order_id,p.product_id,p.product_name,array_agg(images.image),p.price,o.quantity from orders as o left join  products on
-// 	`
+func (pd *productDatabase) ValidateCoupon(c context.Context, CouponId uint) (res.CouponResponse, error) {
+	var couponResp res.CouponResponse
+	query := `select discount,quantity,validity from coupons where coupon_id=?`
+	err := pd.DB.Raw(query, CouponId).Scan(&couponResp).Error
+	if err != nil {
+		return res.CouponResponse{}, errors.New("Not a valid coupon")
+	}
+	return couponResp, nil
+}
 
-// }
+func (pd *productDatabase) FindCouponById(c context.Context, couponId uint) error {
+	var coupon domain.Coupon
+	err := pd.DB.Where("coupon_id=?", couponId).First(&coupon).Error
+	if err != nil {
+		return errors.New("coupon already exist")
+	}
+	return nil
+}
+
+func (pd *productDatabase) ApplyDiscount(c context.Context, order_id uint) (domain.Order, error) {
+	var order domain.Order
+	query := `select *from orders where order_id=?`
+	err := pd.DB.Raw(query, order_id).Scan(&order).Error
+	if err != nil {
+		return domain.Order{}, errors.New("failed to find order by order_id")
+	}
+	return order, nil
+}
+
+func (pd *productDatabase) FindPaymentMethodIdByOrderId(c context.Context, order_id uint) (uint, error) {
+	var order domain.Order
+	err := pd.DB.Raw("SELECT * FROM payment_methods WHERE method_id=?", order_id).First(&order).Error
+	if err != nil {
+
+		return 0, errors.New("failed to find payment method id")
+	}
+	return order.PaymentMethodID, nil
+}
+
+func (pd *productDatabase) UpdateOrderStatus(c context.Context, order_id uint, order_status string) (res.OrderResponse, error) {
+	var order domain.Order
+	var orderResp res.OrderResponse
+	query := `update orders set order_status=?  where order_id=?`
+	err := pd.DB.Raw(query, order_status, order_id).Scan(&order).Error
+	if err != nil {
+		return res.OrderResponse{}, errors.New("failed to update order status")
+	}
+	query1 := `select o.total_amount,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
+	err1 := pd.DB.Raw(query1, order_id).Scan(&orderResp).Error
+	if err1 != nil {
+		return res.OrderResponse{}, errors.New("failed to display order details")
+	}
+	return orderResp, nil
+}
+
+func (pd *productDatabase) FindTotalAmountByOrderId(c context.Context, order_id uint) (float64, error) {
+	var total_amount float64
+	query := `SELECT total_amount FROM orders WHERE order_id=?`
+	err := pd.DB.Raw(query, order_id).Scan(&total_amount).Error
+	if err != nil {
+		return 0, errors.New("failed to fetch total amount")
+	}
+	return total_amount, nil
+}
+
+func (pd *productDatabase) FindPhnEmailByUsrId(c context.Context, usr_id int) (res.PhnEmailResp, error) {
+	var phnEmail res.PhnEmailResp
+	query := `SELECT phone,email FROM users WHERE user_id=?`
+	err := pd.DB.Raw(query, usr_id).Scan(&phnEmail).Error
+	if err != nil {
+		return res.PhnEmailResp{}, errors.New("failed to fetch details")
+	}
+	return phnEmail, nil
+}

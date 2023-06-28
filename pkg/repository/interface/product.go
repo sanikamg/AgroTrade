@@ -39,12 +39,35 @@ type ProductRepository interface {
 	ListCartItems(c context.Context, pagination utils.Pagination, userid int) ([]res.CartResponse, utils.Metadata, error)
 	RemoveProductFromCart(c context.Context, productid uint) error
 
-	//coupon
+	//coupon by admin
 	AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error)
 	FindCoupon(c context.Context, coupon domain.Coupon) error
+
+	//payment method by admin
+	AddPaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error)
+	FindPaymentMethod(c context.Context, payment domain.PaymentMethod) error
+	FindPaymentMethodId(c context.Context, method_id uint) (uint, error)
+	GetPaymentMethods(c context.Context, pagination utils.Pagination) ([]res.PaymentMethodResponse, utils.Metadata, error)
+	UpdatePaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error)
+	DeleteMethod(c context.Context, id uint) error
 
 	//order
 	GetTotalAmount(c context.Context, userid int) ([]domain.Cart_item, error)
 	CreateOrder(c context.Context, order domain.Order) (res.OrderResponse, error)
+	UpdateOrderDetails(c context.Context, uporder req.UpdateOrder) (res.OrderResponse, error)
+	ListAllOrders(c context.Context, pagination utils.Pagination, usrid uint) ([]res.OrderResponse, utils.Metadata, error)
+	GetAllOrders(c context.Context, pagination utils.Pagination) ([]res.OrderResponse, utils.Metadata, error)
+	DeleteOrder(c context.Context, order_id uint) error
+
+	//checkout
+	ValidateCoupon(c context.Context, CouponId uint) (res.CouponResponse, error)
+	FindCouponById(c context.Context, couponId uint) error
+	ApplyDiscount(c context.Context, order_id uint) (domain.Order, error)
 	PlaceOrder(c context.Context, order domain.Order) (res.PaymentResponse, error)
+
+	FindPaymentMethodIdByOrderId(c context.Context, order_id uint) (uint, error)
+	FindTotalAmountByOrderId(c context.Context, order_id uint) (float64, error)
+	FindPhnEmailByUsrId(c context.Context, usr_id int) (res.PhnEmailResp, error)
+
+	UpdateOrderStatus(c context.Context, order_id uint, order_status string) (res.OrderResponse, error)
 }

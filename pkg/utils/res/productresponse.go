@@ -21,16 +21,17 @@ type CartResponse struct {
 }
 
 type OrderResponse struct {
-	Total_Amount float64 `json:"total_amount"  gorm:"not null" `
-	Order_Status string  `json:"order_status"`
-	Address_Id   uint    `json:"address_id" `
+	Total_Amount   float64 `json:"total_amount"  gorm:"not null" `
+	Order_Status   string  `json:"order_status"`
+	Address_Id     uint    `json:"address_id" `
+	Payment_Method string  `json:"payment_method"`
 }
 
 type PaymentResponse struct {
 	Total_Amount float64 `json:"total_amount"  gorm:"not null" `
 	//Balance_Amount int     `json:"balance_amount"`
-	PaymentMethod  string `json:"paymentmethod"  gorm:"not null" `
-	Payment_Status string `json:"payment_status"   `
+	PaymentMethodId string `json:"payment_method_id"  gorm:"not null" `
+	Payment_Status  string `json:"payment_status"   `
 	//Payment_Id     string  `json:"payment_id"`
 	Order_Status string `json:"order_status"`
 	Address_Id   uint   `json:"address_id" `
@@ -44,4 +45,31 @@ type OrderedItems struct {
 	Image        []string
 	Price        int
 	Quantity     uint
+}
+
+type PaymentMethodResponse struct {
+	Method_Id     uint
+	PaymentMethod string
+	MaximumAmount float64
+}
+
+type CouponResponse struct {
+	Discount int
+	Quantity int
+	Validity int64
+}
+
+// razorpay
+type ResRazorpayOrder struct {
+	RazorpayKey     string      `json:"razorpay_key"`
+	UserID          uint        `json:"user_id"`
+	AmountToPay     uint        `json:"amount_to_pay"`
+	RazorpayOrderID interface{} `json:"razorpay_order_id"`
+	Email           string      `json:"email"`
+	Phone           string      `json:"phone"`
+}
+
+type PhnEmailResp struct {
+	Phone string
+	Email string
 }

@@ -36,8 +36,28 @@ type ProductUsecase interface {
 	//coupon
 	AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error)
 
+	//payment
+	AddPaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error)
+	GetPaymentMethods(c context.Context, pagination utils.Pagination) ([]res.PaymentMethodResponse, utils.Metadata, error)
+	UpdatePaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error)
+	DeleteMethod(c context.Context, id uint) error
+
 	//order
 	GetTotalAmount(c context.Context, userid uint) (float64, error)
 	CreateOrder(c context.Context, order domain.Order) (res.OrderResponse, error)
+	UpdateOrderDetails(c context.Context, uporder req.UpdateOrder) (res.OrderResponse, error)
+	ListAllOrders(c context.Context, pagination utils.Pagination, usrid uint) ([]res.OrderResponse, utils.Metadata, error)
+	GetAllOrders(c context.Context, pagination utils.Pagination) ([]res.OrderResponse, utils.Metadata, error)
+	DeleteOrder(c context.Context, order_id uint) error
+
+	ValidateCoupon(c context.Context, CouponId uint) (res.CouponResponse, error)
+	ApplyDiscount(c context.Context, CouponResponse res.CouponResponse, order_id uint) (int, error)
+
+	//checkout
 	PlaceOrder(c context.Context, order domain.Order) (res.PaymentResponse, error)
+	FindPaymentMethodIdByOrderId(c context.Context, order_id uint) (uint, error)
+	UpdateOrderStatus(c context.Context, order_id uint) (res.OrderResponse, error)
+	FindTotalAmountByOrderId(c context.Context, order_id uint) (float64, error)
+	FindPhnEmailByUsrId(c context.Context, usr_id int) (res.PhnEmailResp, error)
+	GetRazorpayOrder(c context.Context, userID uint, razorPay req.RazorPayReq) (res.ResRazorpayOrder, error)
 }

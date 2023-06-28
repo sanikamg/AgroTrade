@@ -129,6 +129,17 @@ func (cr *UserHandler) Register(c *gin.Context) {
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>userlogin>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+// UserLogin godoc
+// @summary api for user to login
+// @description Enter user_name  with password
+// @security ApiKeyAuth
+// @tags User Login
+// @id UserLogin
+// @Param        inputs   body     req.LoginStruct{}   true  "Input Field"
+// @Router /login [post]
+// @Success 200 {object} response.Response{} "successfully logged in"
+// @Failure 400 {object} response.Response{}  "invalid input"
+// @Failure 500 {object} response.Response{}  "faild to generat JWT"
 func (cr *UserHandler) UserLogin(c *gin.Context) {
 	// bind body details
 	var body req.LoginStruct

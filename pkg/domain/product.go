@@ -43,22 +43,20 @@ type Cart_item struct {
 
 // order
 type Order struct {
-	Order_Id uint ` gorm:" serial primaryKey;autoIncrement:true;unique"`
-	User_Id  uint `json:"user_id"  gorm:"not null" `
-
-	//Applied_Coupons string `json:"applied_coupons"  `
-	//Discount        uint   `json:"discount"`
-	Total_Amount float64 `json:"total_amount"  gorm:"not null" `
-	//Balance_Amount int     `json:"balance_amount"`
-	PaymentMethod  string `json:"paymentmethod"  gorm:"not null" `
-	Payment_Status string `json:"payment_status"   `
-	//Payment_Id     string  `json:"payment_id"`
-	Order_Status string `json:"order_status"`
-	Address_Id   uint   `json:"address_id" `
+	Order_Id          uint    ` gorm:" serial primaryKey;autoIncrement:true;unique"`
+	User_Id           uint    `json:"user_id"  gorm:"not null" `
+	Applied_Coupon_id uint    `json:"applied_coupon_id,omitempty"`
+	Total_Amount      float64 `json:"total_amount"  gorm:"not null" `
+	PaymentMethodID   uint    `json:"paymentmethod_id"  gorm:"not null" `
+	Payment_Status    string  `json:"payment_status"`
+	Order_Status      string  `json:"order_status"`
+	Address_Id        uint    `json:"address_id" `
 }
 
 type PaymentMethod struct {
-	COD bool
+	Method_id     uint    ` gorm:" serial primaryKey;autoIncrement:true;unique"`
+	PaymentMethod string  `json:"paymentmethod"`
+	MaximumAmount float64 `json:"maximumamount"`
 }
 
 //coupon

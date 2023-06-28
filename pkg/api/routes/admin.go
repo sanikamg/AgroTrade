@@ -57,5 +57,18 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 		{
 			coupon.POST("/add", productHandler.AddCoupon)
 		}
+
+		paymentmethod := api.Group("/paymentmethod")
+		{
+			paymentmethod.POST("/add", productHandler.AddpaymentMethod)
+			paymentmethod.GET("/view", productHandler.GetAllPaymentMethods)
+			paymentmethod.PATCH("/update", productHandler.UpdatePaymentMethod)
+			paymentmethod.DELETE("/delete", productHandler.DeleteMethod)
+		}
+
+		order := api.Group("/order")
+		{
+			order.GET("/listall", productHandler.GetAllOrders)
+		}
 	}
 }

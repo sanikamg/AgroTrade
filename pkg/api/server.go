@@ -1,10 +1,13 @@
 package http
 
 import (
+	_ "golang_project_ecommerce/cmd/api/docs"
 	"golang_project_ecommerce/pkg/api/handler"
 	"golang_project_ecommerce/pkg/api/routes"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type ServerHTTP struct {
@@ -15,7 +18,8 @@ func NewServerHTTP(userHandler *handler.UserHandler, adminHandler *handler.Admin
 	engine := gin.New()
 
 	engine.Use(gin.Logger())
-	//engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	engine.LoadHTMLGlob("/home/user/Documents/Project/AgroTrade/views/*.html")
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// set up routes
 	routes.UserRoutes(engine.Group("/"), userHandler, productHandler)
