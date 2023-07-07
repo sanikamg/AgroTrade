@@ -1,12 +1,16 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
 	"golang_project_ecommerce/pkg/api/middlware"
 	"golang_project_ecommerce/pkg/common/response"
 	"golang_project_ecommerce/pkg/domain"
 	"golang_project_ecommerce/pkg/utils"
 	"golang_project_ecommerce/pkg/utils/req"
+	"io/ioutil"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -154,6 +158,9 @@ func (pd *ProductHandler) PlaceOrder(c *gin.Context) {
 	coupon_id, _ := strconv.Atoi(c.Query("coupon_id"))
 	order.Order_Id = uint(order_id)
 	order.Applied_Coupon_id = uint(coupon_id)
+
+	order.OrderDate = time.Now()
+	fmt.Println(time.Now())
 	couponResp, err := pd.productUsecase.ValidateCoupon(c, order.Applied_Coupon_id)
 	if err != nil {
 		response := response.ErrorResponse(400, "Invalid coupon", err.Error(), "try with a valid coupon")
@@ -172,6 +179,11 @@ func (pd *ProductHandler) PlaceOrder(c *gin.Context) {
 	if err != nil {
 		response := response.ErrorResponse(400, "failed to place order", err.Error(), "")
 		c.JSON(400, response)
+		return
+	}
+	if paymentResp.PaymentMethodId == "1" {
+		response := response.SuccessResponse(200, "Successfully confirmed order complete payment process on delivery", paymentResp)
+		c.JSON(200, response)
 		return
 	}
 	response := response.SuccessResponse(200, "Successfully  placed order complete payment details", paymentResp)
@@ -201,6 +213,7 @@ func (pd *ProductHandler) CheckOut(c *gin.Context) {
 		}
 		response := response.SuccessResponse(200, "Successfully  confirmed order", orderREsp)
 		c.JSON(200, response)
+		return
 	} else {
 		id, err := middlware.GetId(c, "User_Authorization")
 		if err != nil {
@@ -231,8 +244,64 @@ func (pd *ProductHandler) CheckOut(c *gin.Context) {
 			return
 		}
 		c.HTML(200, "payment.html", razorpayOrder)
-		// response := response.SuccessResponse(200, "Payment Done Successfully", razorpayOrder)
-		// c.JSON(200, response)
+		pd.productUsecase.UpdateStatusRazorpay(c, uint(order_id))
 	}
 
+}
+
+// to verify razorpay payment
+func (c *ProductHandler) RazorpayVerify(ctx *gin.Context) {
+	// user_id, err := middlware.GetId(ctx, "User_Authorization")
+	// if err != nil {
+	// 	response := response.ErrorResponse(400, "user authentication failed", err.Error(), "")
+	// 	ctx.JSON(400, response)
+	// 	return
+	// }
+	// Read the request body
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		// Handle error
+		return
+	}
+
+	// Define a struct to hold the JSON data
+	type RazorpayData struct {
+		RazorpayPaymentID string `json:"razorpay_payment_id"`
+		RazorpayOrderID   string `json:"razorpay_order_id"`
+		RazorpaySignature string `json:"razorpay_signature"`
+	}
+
+	// Unmarshal the JSON data into the struct
+	var data RazorpayData
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		// Handle error
+		return
+	}
+
+	// Access the values
+	razorpayPaymentID := data.RazorpayPaymentID
+	razorpayOrderID := data.RazorpayOrderID
+	razorpaySignature := data.RazorpaySignature
+
+	// Print the retrieved values
+	fmt.Println(razorpayPaymentID, razorpayOrderID, razorpaySignature)
+	//verify the razorpay payment
+	err = utils.VeifyRazorpayPayment(razorpayOrderID, razorpayPaymentID, razorpaySignature)
+	if err != nil {
+		response := response.ErrorResponse(400, "faild to verify razorpay order ", err.Error(), nil)
+		ctx.JSON(400, response)
+		return
+	}
+
+	//delete ordered cart
+	err1 := c.productUsecase.DeleteCart(ctx, 1)
+	if err1 != nil {
+		response := response.ErrorResponse(400, "faild to delete cart ", err.Error(), nil)
+		ctx.JSON(400, response)
+		return
+	}
+
+	response := response.SuccessResponse(200, "successfully payment completed and order approved", nil)
+	ctx.JSON(200, response)
 }

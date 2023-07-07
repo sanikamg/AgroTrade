@@ -1,0 +1,15 @@
+hello:
+	echo "hello"
+
+## Generate swagger docs
+swag: 
+	swag init -g pkg/api/server.go -o ./cmd/api/docs
+
+wire:
+	cd pkg/di && wire
+
+run:
+	go run ./cmd/api/main.go
+
+
+##google-chrome --user-data-dir="~/chrome-dev-session" --disable-web-security

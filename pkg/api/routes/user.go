@@ -26,6 +26,10 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 	{
 		logout.POST("/", userHandler.Logout)
 	}
+	Verify := api.Group("/order")
+	{
+		Verify.POST("verify", productHandler.RazorpayVerify)
+	}
 	//forgotpassword
 	forgotpass := api.Group("/sendotp")
 	{
@@ -69,7 +73,13 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 			Order.GET("/list", productHandler.ListAllOrders)
 			Order.DELETE("/cancel", productHandler.CancelOrder)
 			Order.POST("/applycoupon", productHandler.PlaceOrder)
+
 			Order.POST("/payment", productHandler.CheckOut)
+
+		}
+		Return := api.Group("/return")
+		{
+			Return.POST("/", productHandler.ReturnOrder)
 		}
 	}
 

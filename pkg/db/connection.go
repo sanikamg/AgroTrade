@@ -26,6 +26,7 @@ func ConnectDatabase(cfg config.Config) (*gorm.DB, error) {
 		domain.Order{},
 		domain.Coupon{},
 		domain.PaymentMethod{},
+		domain.OrderReturn{},
 	); err != nil {
 		return nil, err
 	}

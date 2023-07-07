@@ -1,5 +1,7 @@
 package res
 
+import "time"
+
 type AllCategories struct {
 	ID uint `gorm:"serial primarykey;autoIncrement:true;unique"`
 
@@ -21,8 +23,10 @@ type CartResponse struct {
 }
 
 type OrderResponse struct {
+	Order_id       uint    `json:"order_id"`
 	Total_Amount   float64 `json:"total_amount"  gorm:"not null" `
 	Order_Status   string  `json:"order_status"`
+	Payment_Status string  `json:"payment_status"   `
 	Address_Id     uint    `json:"address_id" `
 	Payment_Method string  `json:"payment_method"`
 }
@@ -55,8 +59,12 @@ type PaymentMethodResponse struct {
 
 type CouponResponse struct {
 	Discount int
-	Quantity int
 	Validity int64
+}
+type CouponList struct {
+	Coupon_id uint
+	Discount  int
+	Validity  string
 }
 
 // razorpay
@@ -72,4 +80,13 @@ type ResRazorpayOrder struct {
 type PhnEmailResp struct {
 	Phone string
 	Email string
+}
+
+type ReturnResponse struct {
+	ID           uint      `gorm:"serial primaryKey;autoIncrement:true;unique"`
+	OrderID      uint      `json:"order_id" gorm:"not null;unique"`
+	RequestDate  time.Time `json:"request_date" gorm:"not null"`
+	ReturnReason string    `json:"return_reason" gorm:"not null"`
+	RefundAmount float64   `json:"refund_amount" gorm:"not null"`
+	ReturnStatus string    `json:"return_status"`
 }

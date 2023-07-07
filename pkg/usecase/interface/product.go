@@ -35,6 +35,7 @@ type ProductUsecase interface {
 
 	//coupon
 	AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error)
+	ListAllCoupons(c context.Context, pagination utils.Pagination) ([]res.CouponList, utils.Metadata, error)
 
 	//payment
 	AddPaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error)
@@ -60,4 +61,11 @@ type ProductUsecase interface {
 	FindTotalAmountByOrderId(c context.Context, order_id uint) (float64, error)
 	FindPhnEmailByUsrId(c context.Context, usr_id int) (res.PhnEmailResp, error)
 	GetRazorpayOrder(c context.Context, userID uint, razorPay req.RazorPayReq) (res.ResRazorpayOrder, error)
+
+	//verify and clear cart
+	DeleteCart(c context.Context, usr_id uint) error
+	UpdateStatusRazorpay(c context.Context, order_id uint) (res.OrderResponse, error)
+	//sales report
+	SalesReport(c context.Context, salesData req.ReqSalesReport) ([]res.SalesReport, utils.Metadata, error)
+	ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error)
 }

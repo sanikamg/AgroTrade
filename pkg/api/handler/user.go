@@ -30,13 +30,16 @@ func NewUserhandler(usecase services.UserUsecase) *UserHandler {
 
 var user domain.Users
 
-// var phn domain.Phone
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Register or Signup>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+// SendOtpToPhone godoc
+// @summary api for user to send otp to phone
+// @description Enter phone number
+// @tags add Phone Number
+// @Param        inputs   body     domain.user{}  true  "Input Field"
+// @Router /signup/loginorsignup [post]
+// @Success 200 {object} response.Response{} "error while sending otp"
+// @Failure 400 {object} response.Response{}  "otp send successfully"
 // send otp to phn number
 func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
-
 	if err := c.ShouldBindJSON(&user); err != nil {
 		res := response.ErrorResponse(400, "error while getting  the data from user side", err.Error(), user)
 
@@ -185,7 +188,6 @@ func (cr *UserHandler) UserLogin(c *gin.Context) {
 	}
 	//set cookie
 
-	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("User_Authorization", tokenString["accessToken"], 3600*24*30, "/", "", true, true)
 
 	response := response.SuccessResponse(200, "Successfully logged in", message)

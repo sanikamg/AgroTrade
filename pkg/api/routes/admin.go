@@ -56,6 +56,7 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 		coupon := api.Group("/coupon")
 		{
 			coupon.POST("/add", productHandler.AddCoupon)
+			coupon.GET("/list", productHandler.ListCoupon)
 		}
 
 		paymentmethod := api.Group("/paymentmethod")
@@ -69,6 +70,11 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 		order := api.Group("/order")
 		{
 			order.GET("/listall", productHandler.GetAllOrders)
+		}
+
+		salesReport := api.Group("/salesreport")
+		{
+			salesReport.GET("/", productHandler.SalesReport)
 		}
 	}
 }

@@ -42,6 +42,7 @@ type ProductRepository interface {
 	//coupon by admin
 	AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error)
 	FindCoupon(c context.Context, coupon domain.Coupon) error
+	ListAllCoupons(c context.Context, pagination utils.Pagination) ([]res.CouponList, utils.Metadata, error)
 
 	//payment method by admin
 	AddPaymentMethod(c context.Context, payment domain.PaymentMethod) (domain.PaymentMethod, error)
@@ -70,4 +71,14 @@ type ProductRepository interface {
 	FindPhnEmailByUsrId(c context.Context, usr_id int) (res.PhnEmailResp, error)
 
 	UpdateOrderStatus(c context.Context, order_id uint, order_status string) (res.OrderResponse, error)
+	//verify and clearcart
+	DeleteCart(c context.Context, usr_id uint) error
+	UpdateStatusRazorpay(c context.Context, order_id uint, order_status string, payment_status string) (res.OrderResponse, error)
+
+	//salesreport
+	SalesReport(c context.Context, salesData req.ReqSalesReport) ([]res.SalesReport, utils.Metadata, error)
+
+	//return
+
+	ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error)
 }

@@ -95,3 +95,58 @@ func GetPhn(c *gin.Context, authname string) (string, error) {
 	}
 	return phn, nil
 }
+
+// func HandleOptions(c *gin.Context) {
+// 	// Read the response headers from options_response.txt file
+// 	responseHeaders, err := ioutil.ReadFile("options_response.txt")
+// 	if err != nil {
+// 		// Handle error if unable to read the file
+// 		c.AbortWithStatus(http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	// Set the response headers from the file
+// 	c.Header("Access-Control-Allow-Origin", string(responseHeaders))
+// 	c.Header("Access-Control-Allow-Methods", "POST")
+// 	c.Header("Access-Control-Allow-Headers", "Content-Type")
+
+// 	if c.Request.Method == "OPTIONS" {
+// 		c.AbortWithStatus(http.StatusOK)
+// 		return
+// 	}
+
+// 	c.Next()
+// }
+
+// func CorsMiddleware() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		c.Header("Access-Control-Allow-Origin", "*")
+// 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+// 		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
+// 		c.Header("Access-Control-Allow-Credentials", "true")
+
+// 		// Handle OPTIONS request (pre-flight)
+// 		if c.Request.Method == "OPTIONS" {
+// 			c.AbortWithStatus(204)
+// 			return
+// 		}
+
+// 		c.Next()
+// 	}
+// }
+
+func HandleOptionsRequest(c *gin.Context) {
+	// Set CORS headers
+	c.Header("Access-Control-Allow-Origin", " *")
+	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+	c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept")
+	c.Header("Access-Control-Allow-Credentials", "true")
+
+	// Handle OPTIONS request (pre-flight)
+	if c.Request.Method == "OPTIONS" {
+		c.AbortWithStatus(http.StatusNoContent)
+		return
+	}
+
+	c.Next()
+}

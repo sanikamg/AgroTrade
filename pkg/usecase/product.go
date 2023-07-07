@@ -237,7 +237,7 @@ func (pu *ProductUsecase) RemoveProductFromCart(c context.Context, productid uin
 
 func (pu *ProductUsecase) AddCoupon(c context.Context, coupon domain.Coupon) (domain.Coupon, error) {
 	err := pu.productRepo.FindCoupon(c, coupon)
-	if err == nil {
+	if err != nil {
 		return domain.Coupon{}, err
 	}
 	couponresp, err1 := pu.productRepo.AddCoupon(c, coupon)
@@ -245,6 +245,14 @@ func (pu *ProductUsecase) AddCoupon(c context.Context, coupon domain.Coupon) (do
 		return domain.Coupon{}, err1
 	}
 	return couponresp, nil
+}
+
+func (pu *ProductUsecase) ListAllCoupons(c context.Context, pagination utils.Pagination) ([]res.CouponList, utils.Metadata, error) {
+	coupons, metadata, err := pu.productRepo.ListAllCoupons(c, pagination)
+	if err != nil {
+		return []res.CouponList{}, utils.Metadata{}, err
+	}
+	return coupons, metadata, nil
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>payment method>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -367,6 +375,15 @@ func (pu *ProductUsecase) DeleteOrder(c context.Context, order_id uint) error {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..checkout..>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 func (pu *ProductUsecase) PlaceOrder(c context.Context, order domain.Order) (res.PaymentResponse, error) {
+	method_Id, err := pu.productRepo.FindPaymentMethodIdByOrderId(c, order.Order_Id)
+	if err != nil {
+		return res.PaymentResponse{}, err
+	}
+	if method_Id == 1 {
+		order.Order_Status = "order confirmed"
+	} else {
+		order.Order_Status = "order confirmed payment pending"
+	}
 	paymentresp, err := pu.productRepo.PlaceOrder(c, order)
 	if err != nil {
 		return res.PaymentResponse{}, err
@@ -391,11 +408,11 @@ func (pu *ProductUsecase) ApplyDiscount(c context.Context, CouponResponse res.Co
 	if err != nil {
 		return 0, nil
 	}
-	if CouponResponse.Quantity > 2 {
-		totalamnt := order.Total_Amount - float64(CouponResponse.Discount)
-		return int(totalamnt), nil
-	}
-	return 0, errors.New("Quantity should be more than 5")
+
+	totalamnt := order.Total_Amount - float64(CouponResponse.Discount)
+
+	return int(totalamnt), nil
+
 }
 
 func (pu *ProductUsecase) FindPaymentMethodIdByOrderId(c context.Context, order_id uint) (uint, error) {
@@ -454,4 +471,40 @@ func (pu *ProductUsecase) GetRazorpayOrder(c context.Context, userID uint, razor
 	razorpayOrder.Phone = razorPay.Phone
 
 	return razorpayOrder, nil
+}
+
+func (pu *ProductUsecase) DeleteCart(c context.Context, usr_id uint) error {
+	err := pu.productRepo.DeleteCart(c, usr_id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (pu *ProductUsecase) UpdateStatusRazorpay(c context.Context, order_id uint) (res.OrderResponse, error) {
+	order_status := "order confirmed"
+	payment_status := "Payment Done"
+	orderResp, err := pu.productRepo.UpdateStatusRazorpay(c, order_id, order_status, payment_status)
+	if err != nil {
+		return res.OrderResponse{}, err
+	}
+	return orderResp, nil
+}
+
+// sales report
+func (pu *ProductUsecase) SalesReport(c context.Context, salesData req.ReqSalesReport) ([]res.SalesReport, utils.Metadata, error) {
+	salesReport, metadata, err := pu.productRepo.SalesReport(c, salesData)
+	if err != nil {
+		return []res.SalesReport{}, utils.Metadata{}, err
+	}
+	return salesReport, metadata, nil
+}
+
+// return
+func (pu *ProductUsecase) ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error) {
+	returnResp, err := pu.productRepo.ReturnRequest(c, returnOrder)
+	if err != nil {
+		return res.ReturnResponse{}, err
+	}
+	return returnResp, nil
 }

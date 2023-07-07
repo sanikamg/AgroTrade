@@ -3,8 +3,10 @@ package http
 import (
 	_ "golang_project_ecommerce/cmd/api/docs"
 	"golang_project_ecommerce/pkg/api/handler"
+	"golang_project_ecommerce/pkg/api/middlware"
 	"golang_project_ecommerce/pkg/api/routes"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -29,5 +31,10 @@ func NewServerHTTP(userHandler *handler.UserHandler, adminHandler *handler.Admin
 }
 
 func (serverhttp *ServerHTTP) Start() {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	serverhttp.engine.Use(middlware.HandleOptionsRequest)
+	serverhttp.engine.Use(cors.New(config))
 	serverhttp.engine.Run(":8081")
 }

@@ -43,14 +43,15 @@ type Cart_item struct {
 
 // order
 type Order struct {
-	Order_Id          uint    ` gorm:" serial primaryKey;autoIncrement:true;unique"`
-	User_Id           uint    `json:"user_id"  gorm:"not null" `
-	Applied_Coupon_id uint    `json:"applied_coupon_id,omitempty"`
-	Total_Amount      float64 `json:"total_amount"  gorm:"not null" `
-	PaymentMethodID   uint    `json:"paymentmethod_id"  gorm:"not null" `
-	Payment_Status    string  `json:"payment_status"`
-	Order_Status      string  `json:"order_status"`
-	Address_Id        uint    `json:"address_id" `
+	Order_Id          uint      ` gorm:" serial primaryKey;autoIncrement:true;unique"`
+	User_Id           uint      `json:"user_id"  gorm:"not null" `
+	Applied_Coupon_id uint      `json:"applied_coupon_id,omitempty"`
+	Total_Amount      float64   `json:"total_amount"  gorm:"not null" `
+	PaymentMethodID   uint      `json:"paymentmethod_id"  gorm:"not null" `
+	Payment_Status    string    `json:"payment_status"`
+	Order_Status      string    `json:"order_status"`
+	Address_Id        uint      `json:"address_id" `
+	OrderDate         time.Time `json:"order_date"`
 }
 
 type PaymentMethod struct {
@@ -62,15 +63,27 @@ type PaymentMethod struct {
 //coupon
 
 type Coupon struct {
-	Created_At time.Time
-	Coupon_Id  uint   `gorm:"serial primaryKey;autoIncrement:true;unique"`
-	Coupon     string `json:"coupon"`
-	Discount   int    `json:"discount"`
-	Quantity   int    `json:"quantity"`
-	Validity   int64  `json:"validity"`
+	gorm.Model
+
+	Coupon_Id uint   `gorm:"serial primaryKey;autoIncrement:true;unique"`
+	Coupon    string `json:"coupon"`
+	Discount  int    `json:"discount"`
+	Validity  int64  `json:"validity"`
 }
 
 type Applied_Coupons struct {
 	UserID      uint
 	Coupon_Code string `json:"coupon_code"`
+}
+
+// return
+type OrderReturn struct {
+	ID           uint      `gorm:"serial primaryKey;autoIncrement:true;unique"`
+	OrderID      uint      `json:"order_id" gorm:"not null;unique"`
+	RequestDate  time.Time `json:"request_date" gorm:"not null"`
+	ReturnReason string    `json:"return_reason" gorm:"not null"`
+	RefundAmount float64   `json:"refund_amount" gorm:"not null"`
+	IsApproved   bool      `json:"is_approved"`
+	ReturnDate   time.Time `json:"return_date"`
+	ReturnStatus string    `json:"return_status"`
 }
