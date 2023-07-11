@@ -8,6 +8,41 @@ definitions:
       paymentmethod:
         type: string
     type: object
+  domain.Users:
+    properties:
+      block_status:
+        type: boolean
+      email:
+        maxLength: 12
+        minLength: 3
+        type: string
+      name:
+        maxLength: 12
+        minLength: 3
+        type: string
+      password:
+        maxLength: 64
+        minLength: 8
+        type: string
+      phone:
+        maxLength: 10
+        minLength: 10
+        type: string
+      user_Id:
+        type: integer
+      username:
+        maxLength: 12
+        minLength: 3
+        type: string
+      verification:
+        type: boolean
+    required:
+    - email
+    - name
+    - password
+    - phone
+    - username
+    type: object
   req.LoginStruct:
     properties:
       password:
@@ -63,6 +98,34 @@ paths:
       summary: api for user to login
       tags:
       - User Login
+  /order/create:
+    post:
+      description: Enter address id and method id
+      parameters:
+      - description: address_id
+        format: int32
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: paymentmethod_id
+        format: int32
+        in: query
+        name: pagesize
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: successfully  created order
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: failed to create order
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: api for create order
+      tags:
+      - Create Order
   /paymentmethod/add:
     post:
       description: Enter payment method and maximum amount
@@ -85,6 +148,28 @@ paths:
       summary: api for add payment method by admin
       tags:
       - Add payment method
+  /paymentmethod/delete:
+    delete:
+      description: Delete payment methods
+      parameters:
+      - description: id
+        format: int32
+        in: query
+        name: page
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: successfully  deleted method
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: failed to delete method
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: delete paymentmethod
+      tags:
+      - Delete Payment method
   /paymentmethod/update:
     patch:
       description: Enter payment method and maximum amount with id
@@ -135,4 +220,41 @@ paths:
       summary: Get all paymentmethods
       tags:
       - View all payment method
+  /signup/loginorsignup:
+    post:
+      description: Enter phone number
+      parameters:
+      - description: Input Field
+        in: body
+        name: inputs
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Users'
+      responses:
+        "200":
+          description: error while sending otp
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: otp send successfully
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: api for user to send otp to phone
+      tags:
+      - add Phone Number
+  /signup/verifyotp:
+    post:
+      description: Enter otp
+      responses:
+        "200":
+          description: error while verifying otp
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: otp  successfully verified
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: api for Verify otp of user
+      tags:
+      - OTP Verification
 swagger: "2.0"

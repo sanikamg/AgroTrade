@@ -5,7 +5,6 @@ import (
 	"golang_project_ecommerce/pkg/domain"
 	"golang_project_ecommerce/pkg/utils"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +16,7 @@ func (ph *ProductHandler) AddCoupon(c *gin.Context) {
 		c.JSON(400, response)
 		return
 	}
-	coupon.Validity = time.Now().AddDate(0, 1, 0).Unix()
+	coupon.Coupon = utils.GenerateCouponCode(6)
 	couponresp, err := ph.productUsecase.AddCoupon(c, coupon)
 	if err != nil {
 		response := response.ErrorResponse(400, "failed to add coupon try again", err.Error(), couponresp)

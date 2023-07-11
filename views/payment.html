@@ -46,7 +46,7 @@
 
         // Function for Razorpay verification on the backend
         function verifyPayment(userid, response) {
-            console.log(response.razorpay_payment_id, " : ", response.razorpay_order_id, " ", response.razorpay_signature, " ");
+            console.log(response.razorpay_payment_id, " : ", response.razorpay_order_id, " ", response.razorpay_signature, " ",userid," ");
             $.ajax({
                 type: "POST",
                 url: 'http://localhost:8081/order/verify',
@@ -54,7 +54,7 @@
                     "razorpay_payment_id": response.razorpay_payment_id,
                     "razorpay_order_id": response.razorpay_order_id,
                     "razorpay_signature": response.razorpay_signature,
-                   
+                    "user_id": userid
                 }),
                 contentType: "application/json", // Set the request content type to JSON
                 success: function (response) {

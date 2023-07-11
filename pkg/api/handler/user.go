@@ -34,7 +34,7 @@ var user domain.Users
 // @summary api for user to send otp to phone
 // @description Enter phone number
 // @tags add Phone Number
-// @Param        inputs   body     domain.user{}  true  "Input Field"
+// @Param        inputs   body     domain.Users{}  true  "Input Field"
 // @Router /signup/loginorsignup [post]
 // @Success 200 {object} response.Response{} "error while sending otp"
 // @Failure 400 {object} response.Response{}  "otp send successfully"
@@ -57,6 +57,14 @@ func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// Verify OTP godoc
+// @summary api for Verify otp of user
+// @description Enter otp
+// @tags OTP Verification
+// parameters:- name: inputs in: query description: The inputs parameter as code required: true type: stri format: code name: phoneNumber in: query description: The phone number parameter as string required: true type: string
+// @Router /signup/verifyotp [post]
+// @Success 200 {object} response.Response{} "error while verifying otp"
+// @Failure 400 {object} response.Response{}  "otp  successfully verified"
 // verify otp
 func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 	//bind body details

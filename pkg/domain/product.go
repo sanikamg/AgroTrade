@@ -68,7 +68,7 @@ type Coupon struct {
 	Coupon_Id uint   `gorm:"serial primaryKey;autoIncrement:true;unique"`
 	Coupon    string `json:"coupon"`
 	Discount  int    `json:"discount"`
-	Validity  int64  `json:"validity"`
+	Validity  string `json:"validity"`
 }
 
 type Applied_Coupons struct {

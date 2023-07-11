@@ -22,7 +22,7 @@ func (pd *ProductHandler) ReturnOrder(c *gin.Context) {
 	returnOrder.OrderID = uint(order_id)
 	returnOrder.RequestDate = time.Now()
 	returnOrder.ReturnReason = c.Query("reason")
-	returnOrder.ReturnStatus = "Return Requsted"
+	returnOrder.ReturnStatus = "Return Requested"
 	//finding total amount by orderid
 	total_amount, err := pd.productUsecase.FindTotalAmountByOrderId(c, uint(order_id))
 	if err != nil {

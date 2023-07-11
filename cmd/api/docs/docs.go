@@ -62,6 +62,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/order/create": {
+            "post": {
+                "description": "Enter address id and method id",
+                "tags": [
+                    "Create Order"
+                ],
+                "summary": "api for create order",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "address_id",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "paymentmethod_id",
+                        "name": "pagesize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully  created order",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "failed to create order",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/paymentmethod/add": {
             "post": {
                 "description": "Enter payment method and maximum amount",
@@ -89,6 +130,39 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "failed to add payment method",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/paymentmethod/delete": {
+            "delete": {
+                "description": "Delete payment methods",
+                "tags": [
+                    "Delete Payment method"
+                ],
+                "summary": "delete paymentmethod",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "id",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully  deleted method",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "failed to delete method",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -170,6 +244,63 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/signup/loginorsignup": {
+            "post": {
+                "description": "Enter phone number",
+                "tags": [
+                    "add Phone Number"
+                ],
+                "summary": "api for user to send otp to phone",
+                "parameters": [
+                    {
+                        "description": "Input Field",
+                        "name": "inputs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Users"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "error while sending otp",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "otp send successfully",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup/verifyotp": {
+            "post": {
+                "description": "Enter otp",
+                "tags": [
+                    "OTP Verification"
+                ],
+                "summary": "api for Verify otp of user",
+                "responses": {
+                    "200": {
+                        "description": "error while verifying otp",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "otp  successfully verified",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -184,6 +315,52 @@ const docTemplate = `{
                 },
                 "paymentmethod": {
                     "type": "string"
+                }
+            }
+        },
+        "domain.Users": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "phone",
+                "username"
+            ],
+            "properties": {
+                "block_status": {
+                    "type": "boolean"
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 12,
+                    "minLength": 3
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 12,
+                    "minLength": 3
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 10,
+                    "minLength": 10
+                },
+                "user_Id": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 12,
+                    "minLength": 3
+                },
+                "verification": {
+                    "type": "boolean"
                 }
             }
         },

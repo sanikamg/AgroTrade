@@ -1,0 +1,399 @@
+pkg/api/server.go:4:2: a blank import should be only in a main or test package, or have a comment justifying it
+pkg/api/server.go:15:6: exported type ServerHTTP should have comment or be unexported
+pkg/api/server.go:19:1: exported function NewServerHTTP should have comment or be unexported
+pkg/api/server.go:33:1: exported method ServerHTTP.Start should have comment or be unexported
+pkg/api/handler/admin.go:20:6: exported type AdminHandler should have comment or be unexported
+pkg/api/handler/admin.go:24:1: exported function NewAdminHandler should have comment or be unexported
+pkg/api/handler/admin.go:32:1: exported method AdminHandler.AdminSignup should have comment or be unexported
+pkg/api/handler/admin.go:50:1: exported method AdminHandler.VerifyOTP should have comment or be unexported
+pkg/api/handler/admin.go:50:1: receiver name ad should be consistent with previous receiver name ah for AdminHandler
+pkg/api/handler/admin.go:96:1: exported method AdminHandler.AdminLogin should have comment or be unexported
+pkg/api/handler/admin.go:96:1: receiver name ad should be consistent with previous receiver name ah for AdminHandler
+pkg/api/handler/admin.go:153:1: exported method AdminHandler.GetAllUsers should have comment or be unexported
+pkg/api/handler/admin.go:153:1: receiver name ad should be consistent with previous receiver name ah for AdminHandler
+pkg/api/handler/admin.go:178:1: comment on exported method AdminHandler.BlockUser should be of the form "BlockUser ..."
+pkg/api/handler/admin.go:179:1: receiver name ad should be consistent with previous receiver name ah for AdminHandler
+pkg/api/handler/admin.go:198:1: comment on exported method AdminHandler.UnBlockUser should be of the form "UnBlockUser ..."
+pkg/api/handler/admin.go:199:1: receiver name ad should be consistent with previous receiver name ah for AdminHandler
+pkg/api/handler/admin.go:220:1: exported method AdminHandler.Logout should have comment or be unexported
+pkg/api/handler/admin.go:220:1: receiver name ad should be consistent with previous receiver name ah for AdminHandler
+pkg/api/handler/cart.go:13:1: comment on exported method ProductHandler.AddProductToCart should be of the form "AddProductToCart ..."
+pkg/api/handler/cart.go:23:2: var productId should be productID
+pkg/api/handler/cart.go:81:1: exported method ProductHandler.ViewCart should have comment or be unexported
+pkg/api/handler/cart.go:102:2: don't use underscores in Go names; var user_id should be userID
+pkg/api/handler/cart.go:114:1: exported method ProductHandler.RemoveProductFromCart should have comment or be unexported
+pkg/api/handler/cart.go:115:2: don't use underscores in Go names; var product_id should be productID
+pkg/api/handler/cart.go:120:2: var productId should be productID
+pkg/api/handler/coupon.go:12:1: exported method ProductHandler.AddCoupon should have comment or be unexported
+pkg/api/handler/coupon.go:31:1: exported method ProductHandler.ListCoupon should have comment or be unexported
+pkg/api/handler/order.go:18:1: comment on exported method ProductHandler.CreateOrder should be of the form "CreateOrder ..."
+pkg/api/handler/order.go:30:2: var PaymentMetodId should be PaymentMetodID
+pkg/api/handler/order.go:61:1: exported method ProductHandler.UpdateOrder should have comment or be unexported
+pkg/api/handler/order.go:79:1: exported method ProductHandler.ListAllOrders should have comment or be unexported
+pkg/api/handler/order.go:109:1: comment on exported method ProductHandler.GetAllOrders should be of the form "GetAllOrders ..."
+pkg/api/handler/order.go:135:1: exported method ProductHandler.CancelOrder should have comment or be unexported
+pkg/api/handler/order.go:135:1: receiver name ph should be consistent with previous receiver name pd for ProductHandler
+pkg/api/handler/order.go:136:2: don't use underscores in Go names; var order_id should be orderID
+pkg/api/handler/order.go:155:1: exported method ProductHandler.PlaceOrder should have comment or be unexported
+pkg/api/handler/order.go:157:2: don't use underscores in Go names; var order_id should be orderID
+pkg/api/handler/order.go:158:2: don't use underscores in Go names; var coupon_id should be couponID
+pkg/api/handler/order.go:169:9: if block ends with a return statement, so drop this else and outdent its block
+pkg/api/handler/order.go:193:1: exported method ProductHandler.CheckOut should have comment or be unexported
+pkg/api/handler/order.go:195:2: don't use underscores in Go names; var order_id should be orderID
+pkg/api/handler/order.go:201:2: don't use underscores in Go names; var payment_method_id should be paymentMethodID
+pkg/api/handler/order.go:217:9: if block ends with a return statement, so drop this else and outdent its block
+pkg/api/handler/order.go:252:1: comment on exported method ProductHandler.RazorpayVerify should be of the form "RazorpayVerify ..."
+pkg/api/handler/order.go:253:1: receiver name c should be consistent with previous receiver name pd for ProductHandler
+pkg/api/handler/paymentmethod.go:12:1: comment on exported method ProductHandler.AddpaymentMethod should be of the form "AddpaymentMethod ..."
+pkg/api/handler/paymentmethod.go:37:1: comment on exported method ProductHandler.GetAllPaymentMethods should be of the form "GetAllPaymentMethods ..."
+pkg/api/handler/paymentmethod.go:75:1: comment on exported method ProductHandler.UpdatePaymentMethod should be of the form "UpdatePaymentMethod ..."
+pkg/api/handler/paymentmethod.go:101:1: comment on exported method ProductHandler.DeleteMethod should be of the form "DeleteMethod ..."
+pkg/api/handler/paymentmethod.go:111:2: don't use underscores in Go names; var method_id should be methodID
+pkg/api/handler/product.go:16:6: exported type ProductHandler should have comment or be unexported
+pkg/api/handler/product.go:20:1: exported function NewProductHandler should have comment or be unexported
+pkg/api/handler/product.go:28:1: exported method ProductHandler.SaveCategory should have comment or be unexported
+pkg/api/handler/product.go:48:1: exported method ProductHandler.GetAllCategory should have comment or be unexported
+pkg/api/handler/product.go:68:1: exported method ProductHandler.SaveProduct should have comment or be unexported
+pkg/api/handler/product.go:113:1: exported method ProductHandler.RemoveProduct should have comment or be unexported
+pkg/api/handler/product.go:131:1: exported method ProductHandler.EditProduct should have comment or be unexported
+pkg/api/handler/product.go:150:1: exported method ProductHandler.DeleteCategory should have comment or be unexported
+pkg/api/handler/product.go:171:1: exported method ProductHandler.AddImage should have comment or be unexported
+pkg/api/handler/product.go:204:1: comment on exported method ProductHandler.GetAllProducts should be of the form "GetAllProducts ..."
+pkg/api/handler/product.go:229:1: exported method ProductHandler.GetAllProductsByCategory should have comment or be unexported
+pkg/api/handler/product.go:257:1: exported method ProductHandler.GetProductById should have comment or be unexported
+pkg/api/handler/product.go:257:27: method GetProductById should be GetProductByID
+pkg/api/handler/return.go:12:1: exported method ProductHandler.ReturnOrder should have comment or be unexported
+pkg/api/handler/return.go:15:2: don't use underscores in Go names; var order_id should be orderID
+pkg/api/handler/return.go:27:2: don't use underscores in Go names; var total_amount should be totalAmount
+pkg/api/handler/salesReport.go:14:1: exported method ProductHandler.SalesReport should have comment or be unexported
+pkg/api/handler/user.go:21:6: exported type UserHandler should have comment or be unexported
+pkg/api/handler/user.go:25:1: exported function NewUserhandler should have comment or be unexported
+pkg/api/handler/user.go:33:1: comment on exported method UserHandler.SendOtpPhn should be of the form "SendOtpPhn ..."
+pkg/api/handler/user.go:60:1: comment on exported method UserHandler.VerifyOTP should be of the form "VerifyOTP ..."
+pkg/api/handler/user.go:69:1: receiver name cr should be consistent with previous receiver name uh for UserHandler
+pkg/api/handler/user.go:117:1: exported method UserHandler.Register should have comment or be unexported
+pkg/api/handler/user.go:117:1: receiver name cr should be consistent with previous receiver name uh for UserHandler
+pkg/api/handler/user.go:154:1: receiver name cr should be consistent with previous receiver name uh for UserHandler
+pkg/api/handler/user.go:209:1: exported method UserHandler.Logout should have comment or be unexported
+pkg/api/handler/user.go:209:1: receiver name cr should be consistent with previous receiver name uh for UserHandler
+pkg/api/handler/user.go:229:1: comment on exported method UserHandler.FindUserById should be of the form "FindUserById ..."
+pkg/api/handler/user.go:230:1: receiver name uu should be consistent with previous receiver name uh for UserHandler
+pkg/api/handler/user.go:230:24: method FindUserById should be FindUserByID
+pkg/api/handler/user.go:250:1: exported method UserHandler.EditUserDetails should have comment or be unexported
+pkg/api/handler/user.go:280:1: exported method UserHandler.AddAddress should have comment or be unexported
+pkg/api/handler/user.go:308:1: exported method UserHandler.EditAddress should have comment or be unexported
+pkg/api/handler/user.go:336:1: exported method UserHandler.ListAddresses should have comment or be unexported
+pkg/api/handler/user.go:361:1: exported method UserHandler.DeleteAddress should have comment or be unexported
+pkg/api/handler/user.go:374:1: comment on exported method UserHandler.SendOtpForgotPass should be of the form "SendOtpForgotPass ..."
+pkg/api/handler/user.go:410:1: exported method UserHandler.VerifyOTPForgotPass should have comment or be unexported
+pkg/api/handler/user.go:410:1: receiver name cr should be consistent with previous receiver name uh for UserHandler
+pkg/api/handler/user.go:448:1: exported method UserHandler.ForgotPassword should have comment or be unexported
+pkg/api/handler/user.go:448:1: receiver name ur should be consistent with previous receiver name uh for UserHandler
+pkg/api/middlware/requireAuth.go:12:1: exported function AuthenticateUser should have comment or be unexported
+pkg/api/middlware/requireAuth.go:16:1: exported function AuthenticateAdmin should have comment or be unexported
+pkg/api/middlware/requireAuth.go:20:1: exported function AutheticatePhn should have comment or be unexported
+pkg/api/middlware/requireAuth.go:24:1: exported function RequireAuth should have comment or be unexported
+pkg/api/middlware/requireAuth.go:58:1: comment on exported function GetId should be of the form "GetId ..."
+pkg/api/middlware/requireAuth.go:59:6: func GetId should be GetID
+pkg/api/middlware/requireAuth.go:79:1: comment on exported function GetPhn should be of the form "GetPhn ..."
+pkg/api/middlware/requireAuth.go:138:1: exported function HandleOptionsRequest should have comment or be unexported
+pkg/api/routes/admin.go:10:1: exported function AdminRoutes should have comment or be unexported
+pkg/api/routes/user.go:10:1: exported function UserRoutes should have comment or be unexported
+pkg/auth/jwtauth.go:12:1: exported function GenerateJWT should have comment or be unexported
+pkg/auth/jwtauth.go:30:1: exported function Validatetoken should have comment or be unexported
+pkg/auth/jwtauth.go:54:1: comment on exported function GenerateJWTPhn should be of the form "GenerateJWTPhn ..."
+pkg/common/response/response.go:5:6: exported type Response should have comment or be unexported
+pkg/common/response/response.go:12:1: exported function SuccessResponse should have comment or be unexported
+pkg/common/response/response.go:22:1: exported function ErrorResponse should have comment or be unexported
+pkg/config/config.go:8:6: exported type Config should have comment or be unexported
+pkg/config/config.go:31:1: exported function LoadConfig should have comment or be unexported
+pkg/config/config.go:67:1: comment on exported function GetJWTConfig should be of the form "GetJWTConfig ..."
+pkg/config/config.go:73:1: exported function GetTwilioconfig should have comment or be unexported
+pkg/config/config.go:78:1: exported function GetRazorPayConfig should have comment or be unexported
+pkg/db/connection.go:12:1: exported function ConnectDatabase should have comment or be unexported
+pkg/domain/admin.go:3:6: exported type AdminDetails should have comment or be unexported
+pkg/domain/product.go:9:1: comment on exported type ProductDetails should be of the form "ProductDetails ..." (with optional leading article)
+pkg/domain/product.go:12:2: don't use underscores in Go names; struct field Product_Id should be ProductID
+pkg/domain/product.go:19:2: struct field AdminId should be AdminID
+pkg/domain/product.go:22:1: comment on exported type Category should be of the form "Category ..." (with optional leading article)
+pkg/domain/product.go:28:6: exported type Image should have comment or be unexported
+pkg/domain/product.go:30:2: struct field ProductId should be ProductID
+pkg/domain/product.go:36:6: don't use underscores in Go names; type Cart_item should be CartItem
+pkg/domain/product.go:36:6: exported type Cart_item should have comment or be unexported
+pkg/domain/product.go:37:2: don't use underscores in Go names; struct field Cart_Id should be CartID
+pkg/domain/product.go:38:2: don't use underscores in Go names; struct field User_Id should be UserID
+pkg/domain/product.go:39:2: don't use underscores in Go names; struct field Product_Id should be ProductID
+pkg/domain/product.go:41:2: don't use underscores in Go names; struct field Total_Price should be TotalPrice
+pkg/domain/product.go:44:1: comment on exported type Order should be of the form "Order ..." (with optional leading article)
+pkg/domain/product.go:46:2: don't use underscores in Go names; struct field Order_Id should be OrderID
+pkg/domain/product.go:47:2: don't use underscores in Go names; struct field User_Id should be UserID
+pkg/domain/product.go:48:2: don't use underscores in Go names; struct field Applied_Coupon_id should be AppliedCouponID
+pkg/domain/product.go:49:2: don't use underscores in Go names; struct field Total_Amount should be TotalAmount
+pkg/domain/product.go:51:2: don't use underscores in Go names; struct field Payment_Status should be PaymentStatus
+pkg/domain/product.go:52:2: don't use underscores in Go names; struct field Order_Status should be OrderStatus
+pkg/domain/product.go:53:2: don't use underscores in Go names; struct field Address_Id should be AddressID
+pkg/domain/product.go:57:6: exported type PaymentMethod should have comment or be unexported
+pkg/domain/product.go:58:2: don't use underscores in Go names; struct field Method_id should be MethodID
+pkg/domain/product.go:65:6: exported type Coupon should have comment or be unexported
+pkg/domain/product.go:68:2: don't use underscores in Go names; struct field Coupon_Id should be CouponID
+pkg/domain/product.go:74:6: don't use underscores in Go names; type Applied_Coupons should be AppliedCoupons
+pkg/domain/product.go:74:6: exported type Applied_Coupons should have comment or be unexported
+pkg/domain/product.go:76:2: don't use underscores in Go names; struct field Coupon_Code should be CouponCode
+pkg/domain/product.go:79:1: comment on exported type OrderReturn should be of the form "OrderReturn ..." (with optional leading article)
+pkg/domain/response.go:3:6: exported type ProductResponse should have comment or be unexported
+pkg/domain/response.go:4:2: don't use underscores in Go names; struct field Product_Id should be ProductID
+pkg/domain/response.go:9:2: don't use underscores in Go names; struct field Category_name should be CategoryName
+pkg/domain/user.go:3:6: exported type Users should have comment or be unexported
+pkg/domain/user.go:4:2: don't use underscores in Go names; struct field User_Id should be UserID
+pkg/domain/user.go:14:6: exported type Address should have comment or be unexported
+pkg/domain/user.go:15:2: don't use underscores in Go names; struct field Address_Id should be AddressID
+pkg/domain/user.go:16:2: struct field UserId should be UserID
+pkg/domain/user.go:18:2: don't use underscores in Go names; struct field Full_name should be FullName
+pkg/domain/user.go:19:2: don't use underscores in Go names; struct field Phone_number should be PhoneNumber
+pkg/domain/user.go:20:2: don't use underscores in Go names; struct field House_name should be HouseName
+pkg/domain/user.go:21:2: don't use underscores in Go names; struct field Post_office should be PostOffice
+pkg/repository/admin.go:21:1: exported function NewadminRepository should have comment or be unexported
+pkg/repository/product.go:21:1: exported function NewProductRepository should have comment or be unexported
+pkg/repository/product.go:42:1: receiver name c should be consistent with previous receiver name pd for productDatabase
+pkg/repository/product.go:85:63: method parameter categoryId should be categoryID
+pkg/repository/product.go:108:28: method FindProductById should be FindProductByID
+pkg/repository/product.go:149:6: don't use underscores in Go names; var product_details should be productDetails
+pkg/repository/product.go:364:28: method FindProductsById should be FindProductsByID
+pkg/repository/product.go:423:62: method parameter userId should be userID
+pkg/repository/product.go:572:6: don't use underscores in Go names; var payment_methods should be paymentMethods
+pkg/repository/product.go:581:28: method FindPaymentMethodId should be FindPaymentMethodID
+pkg/repository/product.go:581:67: don't use underscores in Go names; method parameter method_id should be methodID
+pkg/repository/product.go:582:6: don't use underscores in Go names; var payment_methods should be paymentMethods
+pkg/repository/product.go:625:1: receiver name pu should be consistent with previous receiver name pd for productDatabase
+pkg/repository/product.go:726:59: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/repository/product.go:763:62: method parameter CouponId should be CouponID
+pkg/repository/product.go:773:28: method FindCouponById should be FindCouponByID
+pkg/repository/product.go:773:62: method parameter couponId should be couponID
+pkg/repository/product.go:782:61: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/repository/product.go:792:28: method FindPaymentMethodIdByOrderId should be FindPaymentMethodIDByOrderID
+pkg/repository/product.go:792:76: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/repository/product.go:802:65: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/repository/product.go:802:80: don't use underscores in Go names; method parameter order_status should be orderStatus
+pkg/repository/product.go:819:28: method FindTotalAmountByOrderId should be FindTotalAmountByOrderID
+pkg/repository/product.go:819:72: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/repository/product.go:820:6: don't use underscores in Go names; var total_amount should be totalAmount
+pkg/repository/product.go:829:28: method FindPhnEmailByUsrId should be FindPhnEmailByUsrID
+pkg/repository/product.go:829:67: don't use underscores in Go names; method parameter usr_id should be usrID
+pkg/repository/product.go:840:58: don't use underscores in Go names; method parameter usr_id should be usrID
+pkg/repository/product.go:850:68: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/repository/product.go:850:83: don't use underscores in Go names; method parameter order_status should be orderStatus
+pkg/repository/product.go:850:104: don't use underscores in Go names; method parameter payment_status should be paymentStatus
+pkg/repository/user.go:23:1: exported function NewUserRepository should have comment or be unexported
+pkg/repository/user.go:114:1: receiver name pd should be consistent with previous receiver name ud for userDatabase
+pkg/repository/user.go:128:25: method FindUserById should be FindUserByID
+pkg/repository/interface/admin.go:11:6: exported type AdminRepository should have comment or be unexported
+pkg/repository/interface/product.go:11:6: exported type ProductRepository should have comment or be unexported
+pkg/repository/interface/product.go:16:37: interface method parameter categoryId should be categoryID
+pkg/repository/interface/product.go:26:36: interface method parameter ProductId should be ProductID
+pkg/repository/interface/product.go:36:37: interface method parameter userId should be userID
+pkg/repository/interface/product.go:50:41: don't use underscores in Go names; interface method parameter method_id should be methodID
+pkg/repository/interface/product.go:61:33: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/repository/interface/product.go:64:36: interface method parameter CouponId should be CouponID
+pkg/repository/interface/product.go:65:36: interface method parameter couponId should be couponID
+pkg/repository/interface/product.go:66:35: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/repository/interface/product.go:69:50: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/repository/interface/product.go:70:46: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/repository/interface/product.go:71:41: don't use underscores in Go names; interface method parameter usr_id should be usrID
+pkg/repository/interface/product.go:73:39: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/repository/interface/product.go:73:54: don't use underscores in Go names; interface method parameter order_status should be orderStatus
+pkg/repository/interface/product.go:75:32: don't use underscores in Go names; interface method parameter usr_id should be usrID
+pkg/repository/interface/product.go:76:42: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/repository/interface/product.go:76:57: don't use underscores in Go names; interface method parameter order_status should be orderStatus
+pkg/repository/interface/product.go:76:78: don't use underscores in Go names; interface method parameter payment_status should be paymentStatus
+pkg/repository/interface/user.go:11:6: exported type UserRepository should have comment or be unexported
+pkg/usecase/admin.go:16:6: exported type AdminUsecase should have comment or be unexported
+pkg/usecase/admin.go:20:1: exported function NewadminUsecase should have comment or be unexported
+pkg/usecase/admin.go:46:1: exported method AdminUsecase.AdminLogin should have comment or be unexported
+pkg/usecase/admin.go:63:1: exported method AdminUsecase.FindAllUsers should have comment or be unexported
+pkg/usecase/admin.go:73:1: exported method AdminUsecase.BlockUser should have comment or be unexported
+pkg/usecase/admin.go:86:1: exported method AdminUsecase.UnBlockUser should have comment or be unexported
+pkg/usecase/admin.go:97:1: comment on exported method AdminUsecase.FindByUsername should be of the form "FindByUsername ..."
+pkg/usecase/product.go:21:6: exported type ProductUsecase should have comment or be unexported
+pkg/usecase/product.go:25:1: exported function NewProductUsecase should have comment or be unexported
+pkg/usecase/product.go:31:1: comment on exported method ProductUsecase.AddCategory should be of the form "AddCategory ..."
+pkg/usecase/product.go:44:1: exported method ProductUsecase.DisplayAllCategory should have comment or be unexported
+pkg/usecase/product.go:53:1: exported method ProductUsecase.DeleteCategory should have comment or be unexported
+pkg/usecase/product.go:65:1: comment on exported method ProductUsecase.AddProduct should be of the form "AddProduct ..."
+pkg/usecase/product.go:87:1: exported method ProductUsecase.GetCategoryByID should have comment or be unexported
+pkg/usecase/product.go:87:62: method parameter categoryId should be categoryID
+pkg/usecase/product.go:95:1: comment on exported method ProductUsecase.DeleteProduct should be of the form "DeleteProduct ..."
+pkg/usecase/product.go:109:1: exported method ProductUsecase.UpdateProduct should have comment or be unexported
+pkg/usecase/product.go:122:1: exported method ProductUsecase.AddImage should have comment or be unexported
+pkg/usecase/product.go:162:1: exported method ProductUsecase.GetProductByID should have comment or be unexported
+pkg/usecase/product.go:162:61: method parameter ProductId should be ProductID
+pkg/usecase/product.go:171:1: exported method ProductUsecase.FindAllProducts should have comment or be unexported
+pkg/usecase/product.go:178:1: exported method ProductUsecase.FindAllProductsByCategory should have comment or be unexported
+pkg/usecase/product.go:186:1: exported method ProductUsecase.FindProductsById should have comment or be unexported
+pkg/usecase/product.go:186:27: method FindProductsById should be FindProductsByID
+pkg/usecase/product.go:194:1: comment on exported method ProductUsecase.GetCartByUserID should be of the form "GetCartByUserID ..."
+pkg/usecase/product.go:195:62: method parameter userId should be userID
+pkg/usecase/product.go:203:1: exported method ProductUsecase.AddToCart should have comment or be unexported
+pkg/usecase/product.go:212:1: exported method ProductUsecase.UpdateCart should have comment or be unexported
+pkg/usecase/product.go:220:1: exported method ProductUsecase.ListCartItems should have comment or be unexported
+pkg/usecase/product.go:228:1: exported method ProductUsecase.RemoveProductFromCart should have comment or be unexported
+pkg/usecase/product.go:238:1: exported method ProductUsecase.AddCoupon should have comment or be unexported
+pkg/usecase/product.go:250:1: exported method ProductUsecase.ListAllCoupons should have comment or be unexported
+pkg/usecase/product.go:260:1: comment on exported method ProductUsecase.AddPaymentMethod should be of the form "AddPaymentMethod ..."
+pkg/usecase/product.go:273:1: comment on exported method ProductUsecase.GetPaymentMethods should be of the form "GetPaymentMethods ..."
+pkg/usecase/product.go:282:1: comment on exported method ProductUsecase.UpdatePaymentMethod should be of the form "UpdatePaymentMethod ..."
+pkg/usecase/product.go:298:1: exported method ProductUsecase.DeleteMethod should have comment or be unexported
+pkg/usecase/product.go:309:1: exported method ProductUsecase.GetTotalAmount should have comment or be unexported
+pkg/usecase/product.go:310:6: don't use underscores in Go names; var total_amount should be totalAmount
+pkg/usecase/product.go:323:1: exported method ProductUsecase.CreateOrder should have comment or be unexported
+pkg/usecase/product.go:337:1: exported method ProductUsecase.UpdateOrderDetails should have comment or be unexported
+pkg/usecase/product.go:351:1: exported method ProductUsecase.ListAllOrders should have comment or be unexported
+pkg/usecase/product.go:359:1: exported method ProductUsecase.GetAllOrders should have comment or be unexported
+pkg/usecase/product.go:367:1: exported method ProductUsecase.DeleteOrder should have comment or be unexported
+pkg/usecase/product.go:367:58: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/usecase/product.go:377:1: exported method ProductUsecase.PlaceOrder should have comment or be unexported
+pkg/usecase/product.go:378:2: don't use underscores in Go names; var method_Id should be methodID
+pkg/usecase/product.go:394:1: exported method ProductUsecase.ValidateCoupon should have comment or be unexported
+pkg/usecase/product.go:394:61: method parameter CouponId should be CouponID
+pkg/usecase/product.go:406:1: exported method ProductUsecase.ApplyDiscount should have comment or be unexported
+pkg/usecase/product.go:406:95: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/usecase/product.go:418:1: exported method ProductUsecase.FindPaymentMethodIdByOrderId should have comment or be unexported
+pkg/usecase/product.go:418:27: method FindPaymentMethodIdByOrderId should be FindPaymentMethodIDByOrderID
+pkg/usecase/product.go:418:75: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/usecase/product.go:419:2: don't use underscores in Go names; var method_id should be methodID
+pkg/usecase/product.go:426:1: exported method ProductUsecase.UpdateOrderStatus should have comment or be unexported
+pkg/usecase/product.go:426:64: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/usecase/product.go:427:2: don't use underscores in Go names; var order_status should be orderStatus
+pkg/usecase/product.go:435:1: exported method ProductUsecase.FindTotalAmountByOrderId should have comment or be unexported
+pkg/usecase/product.go:435:27: method FindTotalAmountByOrderId should be FindTotalAmountByOrderID
+pkg/usecase/product.go:435:71: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/usecase/product.go:443:1: exported method ProductUsecase.FindPhnEmailByUsrId should have comment or be unexported
+pkg/usecase/product.go:443:27: method FindPhnEmailByUsrId should be FindPhnEmailByUsrID
+pkg/usecase/product.go:443:66: don't use underscores in Go names; method parameter usr_id should be usrID
+pkg/usecase/product.go:451:1: comment on exported method ProductUsecase.GetRazorpayOrder should be of the form "GetRazorpayOrder ..."
+pkg/usecase/product.go:457:2: var razopayOrderId should be razopayOrderID
+pkg/usecase/product.go:476:1: exported method ProductUsecase.DeleteCart should have comment or be unexported
+pkg/usecase/product.go:476:57: don't use underscores in Go names; method parameter usr_id should be usrID
+pkg/usecase/product.go:484:1: exported method ProductUsecase.UpdateStatusRazorpay should have comment or be unexported
+pkg/usecase/product.go:484:67: don't use underscores in Go names; method parameter order_id should be orderID
+pkg/usecase/product.go:485:2: don't use underscores in Go names; var order_status should be orderStatus
+pkg/usecase/product.go:486:2: don't use underscores in Go names; var payment_status should be paymentStatus
+pkg/usecase/product.go:494:1: comment on exported method ProductUsecase.SalesReport should be of the form "SalesReport ..."
+pkg/usecase/product.go:503:1: comment on exported method ProductUsecase.ReturnRequest should be of the form "ReturnRequest ..."
+pkg/usecase/user.go:17:6: exported type UserUsecase should have comment or be unexported
+pkg/usecase/user.go:21:1: exported function NewUserUsecase should have comment or be unexported
+pkg/usecase/user.go:31:1: exported method UserUsecase.SendOtpPhn should have comment or be unexported
+pkg/usecase/user.go:59:1: exported method UserUsecase.VerifyOtp should have comment or be unexported
+pkg/usecase/user.go:73:1: exported method UserUsecase.UpdateStatus should have comment or be unexported
+pkg/usecase/user.go:82:1: exported method UserUsecase.Register should have comment or be unexported
+pkg/usecase/user.go:108:1: comment on exported method UserUsecase.Login should be of the form "Login ..."
+pkg/usecase/user.go:109:1: receiver name c should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/user.go:150:1: comment on exported method UserUsecase.FindUserById should be of the form "FindUserById ..."
+pkg/usecase/user.go:151:1: receiver name ur should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/user.go:151:24: method FindUserById should be FindUserByID
+pkg/usecase/user.go:159:1: exported method UserUsecase.EditUserDetails should have comment or be unexported
+pkg/usecase/user.go:159:1: receiver name ur should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/user.go:172:1: comment on exported method UserUsecase.AddAddress should be of the form "AddAddress ..."
+pkg/usecase/user.go:173:1: receiver name ur should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/user.go:182:1: exported method UserUsecase.EditAddress should have comment or be unexported
+pkg/usecase/user.go:182:1: receiver name ur should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/user.go:194:1: exported method UserUsecase.ListAddresses should have comment or be unexported
+pkg/usecase/user.go:202:1: exported method UserUsecase.DeleteAddress should have comment or be unexported
+pkg/usecase/user.go:202:1: receiver name ur should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/user.go:216:1: exported method UserUsecase.SendOtpForgotPass should have comment or be unexported
+pkg/usecase/user.go:232:1: exported method UserUsecase.VerifyOtpForgotpass should have comment or be unexported
+pkg/usecase/user.go:242:1: exported method UserUsecase.ForgotPassword should have comment or be unexported
+pkg/usecase/user.go:242:1: receiver name ur should be consistent with previous receiver name uu for UserUsecase
+pkg/usecase/interface/admin.go:10:6: exported type AdminUsecase should have comment or be unexported
+pkg/usecase/interface/product.go:12:6: exported type ProductUsecase should have comment or be unexported
+pkg/usecase/interface/product.go:16:37: interface method parameter categoryId should be categoryID
+pkg/usecase/interface/product.go:21:36: interface method parameter ProductId should be ProductID
+pkg/usecase/interface/product.go:30:37: interface method parameter userId should be userID
+pkg/usecase/interface/product.go:52:33: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/usecase/interface/product.go:54:36: interface method parameter CouponId should be CouponID
+pkg/usecase/interface/product.go:55:70: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/usecase/interface/product.go:59:50: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/usecase/interface/product.go:60:39: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/usecase/interface/product.go:61:46: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/usecase/interface/product.go:62:41: don't use underscores in Go names; interface method parameter usr_id should be usrID
+pkg/usecase/interface/product.go:66:32: don't use underscores in Go names; interface method parameter usr_id should be usrID
+pkg/usecase/interface/product.go:67:42: don't use underscores in Go names; interface method parameter order_id should be orderID
+pkg/usecase/interface/user.go:11:6: exported type UserUsecase should have comment or be unexported
+pkg/utils/pagination.go:7:6: exported type Pagination should have comment or be unexported
+pkg/utils/pagination.go:13:6: exported type Metadata should have comment or be unexported
+pkg/utils/pagination.go:21:1: comment on exported method Pagination.Limit should be of the form "Limit ..."
+pkg/utils/pagination.go:26:1: exported method Pagination.Offset should have comment or be unexported
+pkg/utils/pagination.go:29:1: exported function ComputeMetadata should have comment or be unexported
+pkg/utils/razorpay.go:15:1: exported function GenerateRazorpayOrder should have comment or be unexported
+pkg/utils/razorpay.go:15:49: func parameter recieptIdOptional should be recieptIDOptional
+pkg/utils/razorpay.go:38:1: exported function VeifyRazorpayPayment should have comment or be unexported
+pkg/utils/utils.go:12:1: exported function ResponseJSON should have comment or be unexported
+pkg/utils/utils.go:18:1: exported function StringToTime should have comment or be unexported
+pkg/utils/utils.go:31:1: exported function GenerateCouponCode should have comment or be unexported
+pkg/utils/req/adminreq.go:8:6: exported type DeleteId should have comment or be unexported
+pkg/utils/req/adminreq.go:8:6: type DeleteId should be DeleteID
+pkg/utils/req/adminreq.go:12:6: exported type ReqSalesReport should have comment or be unexported
+pkg/utils/req/adminreq.go:12:6: type name will be used as req.ReqSalesReport by other packages, and that stutters; consider calling this SalesReport
+pkg/utils/req/common.go:5:6: exported type LoginStruct should have comment or be unexported
+pkg/utils/req/common.go:12:6: exported type OtpStruct should have comment or be unexported
+pkg/utils/req/common.go:16:1: comment on exported type Block should be of the form "Block ..." (with optional leading article)
+pkg/utils/req/common.go:21:6: exported type BlockStatus should have comment or be unexported
+pkg/utils/req/common.go:26:6: exported type ForgotPassword should have comment or be unexported
+pkg/utils/req/common.go:31:6: exported type Phn should have comment or be unexported
+pkg/utils/req/common.go:35:6: exported type Pass should have comment or be unexported
+pkg/utils/req/productreq.go:3:6: exported type UpdateProduct should have comment or be unexported
+pkg/utils/req/productreq.go:4:2: struct field ProductId should be ProductID
+pkg/utils/req/productreq.go:11:6: exported type DeleteCategory should have comment or be unexported
+pkg/utils/req/productreq.go:15:6: exported type UpdateOrder should have comment or be unexported
+pkg/utils/req/productreq.go:16:2: don't use underscores in Go names; struct field Order_Id should be OrderID
+pkg/utils/req/productreq.go:18:2: don't use underscores in Go names; struct field Address_Id should be AddressID
+pkg/utils/req/productreq.go:21:6: exported type ReqRazorpayVeification should have comment or be unexported
+pkg/utils/req/productreq.go:21:6: type name will be used as req.ReqRazorpayVeification by other packages, and that stutters; consider calling this RazorpayVeification
+pkg/utils/req/productreq.go:27:6: exported type RazorPayReq should have comment or be unexported
+pkg/utils/req/productreq.go:28:2: don't use underscores in Go names; struct field Total_Amount should be TotalAmount
+pkg/utils/req/userrequest.go:3:6: exported type Categoryreq should have comment or be unexported
+pkg/utils/req/userrequest.go:7:6: exported type Usereditreq should have comment or be unexported
+pkg/utils/res/AddressResponse.go:3:6: exported type AddressResponse should have comment or be unexported
+pkg/utils/res/AddressResponse.go:4:2: don't use underscores in Go names; struct field Address_Id should be AddressID
+pkg/utils/res/AddressResponse.go:5:2: don't use underscores in Go names; struct field User_Id should be UserID
+pkg/utils/res/AddressResponse.go:6:2: don't use underscores in Go names; struct field Full_name should be FullName
+pkg/utils/res/AddressResponse.go:7:2: don't use underscores in Go names; struct field Phone_number should be PhoneNumber
+pkg/utils/res/AddressResponse.go:8:2: don't use underscores in Go names; struct field House_name should be HouseName
+pkg/utils/res/AddressResponse.go:9:2: don't use underscores in Go names; struct field Post_office should be PostOffice
+pkg/utils/res/adminres.go:5:6: exported type SalesReport should have comment or be unexported
+pkg/utils/res/adminresponse.go:5:6: exported type AllUsers should have comment or be unexported
+pkg/utils/res/productresponse.go:5:6: exported type AllCategories should have comment or be unexported
+pkg/utils/res/productresponse.go:11:6: exported type AllProducts should have comment or be unexported
+pkg/utils/res/productresponse.go:18:6: exported type CartResponse should have comment or be unexported
+pkg/utils/res/productresponse.go:19:2: don't use underscores in Go names; struct field Product_Id should be ProductID
+pkg/utils/res/productresponse.go:21:2: don't use underscores in Go names; struct field Total_Price should be TotalPrice
+pkg/utils/res/productresponse.go:25:6: exported type OrderResponse should have comment or be unexported
+pkg/utils/res/productresponse.go:26:2: don't use underscores in Go names; struct field Order_id should be OrderID
+pkg/utils/res/productresponse.go:27:2: don't use underscores in Go names; struct field Total_Amount should be TotalAmount
+pkg/utils/res/productresponse.go:28:2: don't use underscores in Go names; struct field Order_Status should be OrderStatus
+pkg/utils/res/productresponse.go:29:2: don't use underscores in Go names; struct field Payment_Status should be PaymentStatus
+pkg/utils/res/productresponse.go:30:2: don't use underscores in Go names; struct field Address_Id should be AddressID
+pkg/utils/res/productresponse.go:31:2: don't use underscores in Go names; struct field Payment_Method should be PaymentMethod
+pkg/utils/res/productresponse.go:34:6: exported type PaymentResponse should have comment or be unexported
+pkg/utils/res/productresponse.go:35:2: don't use underscores in Go names; struct field Total_Amount should be TotalAmount
+pkg/utils/res/productresponse.go:37:2: struct field PaymentMethodId should be PaymentMethodID
+pkg/utils/res/productresponse.go:38:2: don't use underscores in Go names; struct field Payment_Status should be PaymentStatus
+pkg/utils/res/productresponse.go:40:2: don't use underscores in Go names; struct field Order_Status should be OrderStatus
+pkg/utils/res/productresponse.go:41:2: don't use underscores in Go names; struct field Address_Id should be AddressID
+pkg/utils/res/productresponse.go:44:6: exported type OrderedItems should have comment or be unexported
+pkg/utils/res/productresponse.go:45:2: don't use underscores in Go names; struct field User_id should be UserID
+pkg/utils/res/productresponse.go:46:2: don't use underscores in Go names; struct field Product_id should be ProductID
+pkg/utils/res/productresponse.go:47:2: don't use underscores in Go names; struct field Order_Id should be OrderID
+pkg/utils/res/productresponse.go:48:2: don't use underscores in Go names; struct field Product_Name should be ProductName
+pkg/utils/res/productresponse.go:54:6: exported type PaymentMethodResponse should have comment or be unexported
+pkg/utils/res/productresponse.go:55:2: don't use underscores in Go names; struct field Method_Id should be MethodID
+pkg/utils/res/productresponse.go:60:6: exported type CouponResponse should have comment or be unexported
+pkg/utils/res/productresponse.go:64:6: exported type CouponList should have comment or be unexported
+pkg/utils/res/productresponse.go:65:2: don't use underscores in Go names; struct field Coupon_id should be CouponID
+pkg/utils/res/productresponse.go:70:1: comment on exported type ResRazorpayOrder should be of the form "ResRazorpayOrder ..." (with optional leading article)
+pkg/utils/res/productresponse.go:71:6: type name will be used as res.ResRazorpayOrder by other packages, and that stutters; consider calling this RazorpayOrder
+pkg/utils/res/productresponse.go:80:6: exported type PhnEmailResp should have comment or be unexported
+pkg/utils/res/productresponse.go:85:6: exported type ReturnResponse should have comment or be unexported
+pkg/verification/verifyOTP.go:13:5: exported var AuthToken should have its own declaration
+pkg/verification/verifyOTP.go:15:1: exported function InitTwilio should have comment or be unexported
+pkg/verification/verifyOTP.go:24:1: exported function SendOtp should have comment or be unexported
+pkg/verification/verifyOTP.go:38:1: comment on exported function VerifyOtp should be of the form "VerifyOtp ..."

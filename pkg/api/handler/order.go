@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"golang_project_ecommerce/pkg/api/middlware"
 	"golang_project_ecommerce/pkg/common/response"
 	"golang_project_ecommerce/pkg/domain"
@@ -160,7 +159,7 @@ func (pd *ProductHandler) PlaceOrder(c *gin.Context) {
 	order.Applied_Coupon_id = uint(coupon_id)
 
 	order.OrderDate = time.Now()
-	fmt.Println(time.Now())
+
 	couponResp, err := pd.productUsecase.ValidateCoupon(c, order.Applied_Coupon_id)
 	if err != nil {
 		response := response.ErrorResponse(400, "Invalid coupon", err.Error(), "try with a valid coupon")
@@ -251,12 +250,6 @@ func (pd *ProductHandler) CheckOut(c *gin.Context) {
 
 // to verify razorpay payment
 func (c *ProductHandler) RazorpayVerify(ctx *gin.Context) {
-	// user_id, err := middlware.GetId(ctx, "User_Authorization")
-	// if err != nil {
-	// 	response := response.ErrorResponse(400, "user authentication failed", err.Error(), "")
-	// 	ctx.JSON(400, response)
-	// 	return
-	// }
 	// Read the request body
 	body, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
@@ -264,30 +257,16 @@ func (c *ProductHandler) RazorpayVerify(ctx *gin.Context) {
 		return
 	}
 
-	// Define a struct to hold the JSON data
-	type RazorpayData struct {
-		RazorpayPaymentID string `json:"razorpay_payment_id"`
-		RazorpayOrderID   string `json:"razorpay_order_id"`
-		RazorpaySignature string `json:"razorpay_signature"`
-	}
-
 	// Unmarshal the JSON data into the struct
-	var data RazorpayData
+	var data req.RazorpayVeification
 	err = json.Unmarshal(body, &data)
 	if err != nil {
 		// Handle error
 		return
 	}
-
-	// Access the values
-	razorpayPaymentID := data.RazorpayPaymentID
-	razorpayOrderID := data.RazorpayOrderID
-	razorpaySignature := data.RazorpaySignature
-
-	// Print the retrieved values
-	fmt.Println(razorpayPaymentID, razorpayOrderID, razorpaySignature)
+	userid, _ := strconv.Atoi(data.UserID)
 	//verify the razorpay payment
-	err = utils.VeifyRazorpayPayment(razorpayOrderID, razorpayPaymentID, razorpaySignature)
+	err = utils.VeifyRazorpayPayment(data.RazorpayOrderID, data.RazorpayPaymentID, data.RazorpaySignature)
 	if err != nil {
 		response := response.ErrorResponse(400, "faild to verify razorpay order ", err.Error(), nil)
 		ctx.JSON(400, response)
@@ -295,7 +274,7 @@ func (c *ProductHandler) RazorpayVerify(ctx *gin.Context) {
 	}
 
 	//delete ordered cart
-	err1 := c.productUsecase.DeleteCart(ctx, 1)
+	err1 := c.productUsecase.DeleteCart(ctx, uint(userid))
 	if err1 != nil {
 		response := response.ErrorResponse(400, "faild to delete cart ", err.Error(), nil)
 		ctx.JSON(400, response)

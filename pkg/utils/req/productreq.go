@@ -18,11 +18,11 @@ type UpdateOrder struct {
 	Address_Id      uint `json:"address_id" `
 }
 
-type ReqRazorpayVeification struct {
+type RazorpayVeification struct {
 	RazorpayPaymentID string `json:"razorpay_payment_id"`
 	RazorpayOrderID   string `json:"razorpay_order_id"`
 	RazorpaySignature string `json:"razorpay_signature"`
-	UserID            uint   `json:"user_id"`
+	UserID            string `json:"user_id"`
 }
 type RazorPayReq struct {
 	Total_Amount float64
