@@ -245,11 +245,11 @@ const docTemplate = `{
                 }
             }
         },
-        "/signup/loginorsignup": {
+        "/signup/": {
             "post": {
                 "description": "Enter phone number",
                 "tags": [
-                    "add Phone Number"
+                    "SignUp For User"
                 ],
                 "summary": "api for user to send otp to phone",
                 "parameters": [
@@ -279,13 +279,58 @@ const docTemplate = `{
                 }
             }
         },
-        "/signup/verifyotp": {
+        "/signup/register": {
+            "post": {
+                "description": "Enter user details",
+                "tags": [
+                    "Complete Registration"
+                ],
+                "summary": "api for complete registration of user",
+                "parameters": [
+                    {
+                        "description": "Input Field",
+                        "name": "inputs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Users"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "can't complete registration",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Registration completed please login",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/signup/verify_otp": {
             "post": {
                 "description": "Enter otp",
                 "tags": [
-                    "OTP Verification"
+                    "OTP Verification for user signup"
                 ],
                 "summary": "api for Verify otp of user",
+                "parameters": [
+                    {
+                        "description": "Input Field",
+                        "name": "inputs",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/req.OtpStruct"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "error while verifying otp",
@@ -380,6 +425,19 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 12,
                     "minLength": 3
+                }
+            }
+        },
+        "req.OtpStruct": {
+            "type": "object",
+            "required": [
+                "otp"
+            ],
+            "properties": {
+                "otp": {
+                    "type": "string",
+                    "maxLength": 6,
+                    "minLength": 6
                 }
             }
         },

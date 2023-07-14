@@ -21,6 +21,10 @@ func AutheticatePhn(c *gin.Context) {
 	RequireAuth(c, "Phone_Authorization")
 }
 
+func AuthenticateUserSignup(c *gin.Context) {
+	RequireAuth(c, "Signup_Authorization")
+}
+
 func RequireAuth(c *gin.Context, authname string) {
 
 	tokenString, err := c.Cookie(authname)

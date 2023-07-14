@@ -57,6 +57,15 @@ definitions:
     - password
     - username
     type: object
+  req.OtpStruct:
+    properties:
+      otp:
+        maxLength: 6
+        minLength: 6
+        type: string
+    required:
+    - otp
+    type: object
   response.Response:
     properties:
       data: {}
@@ -220,7 +229,7 @@ paths:
       summary: Get all paymentmethods
       tags:
       - View all payment method
-  /signup/loginorsignup:
+  /signup/:
     post:
       description: Enter phone number
       parameters:
@@ -241,10 +250,39 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: api for user to send otp to phone
       tags:
-      - add Phone Number
-  /signup/verifyotp:
+      - SignUp For User
+  /signup/register:
+    post:
+      description: Enter user details
+      parameters:
+      - description: Input Field
+        in: body
+        name: inputs
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Users'
+      responses:
+        "200":
+          description: can't complete registration
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Registration completed please login
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: api for complete registration of user
+      tags:
+      - Complete Registration
+  /signup/verify_otp:
     post:
       description: Enter otp
+      parameters:
+      - description: Input Field
+        in: body
+        name: inputs
+        required: true
+        schema:
+          $ref: '#/definitions/req.OtpStruct'
       responses:
         "200":
           description: error while verifying otp
@@ -256,5 +294,5 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: api for Verify otp of user
       tags:
-      - OTP Verification
+      - OTP Verification for user signup
 swagger: "2.0"

@@ -58,7 +58,7 @@ func GenerateJWTPhn(phn string) (map[string]string, error) {
 	// you would like it to contain.
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": phn,
-		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
+		"exp": time.Now().Add(time.Minute * 5).Unix(),
 	})
 
 	// Sign and get the complete encoded token as a string using the secret

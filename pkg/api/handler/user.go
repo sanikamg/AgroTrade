@@ -33,9 +33,9 @@ var user domain.Users
 // SendOtpToPhone godoc
 // @summary api for user to send otp to phone
 // @description Enter phone number
-// @tags add Phone Number
+// @tags SignUp For User
 // @Param        inputs   body     domain.Users{}  true  "Input Field"
-// @Router /signup/loginorsignup [post]
+// @Router /signup/ [post]
 // @Success 200 {object} response.Response{} "error while sending otp"
 // @Failure 400 {object} response.Response{}  "otp send successfully"
 // send otp to phn number
@@ -53,6 +53,20 @@ func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
+
+	//generate tokenstring with jwt
+	tokenString, err := auth.GenerateJWTPhn(user.Phone)
+	if err != nil {
+		response := response.ErrorResponse(400, "failed to send otp", err.Error(), "user didn't exist")
+
+		c.JSON(400, response)
+		return
+	}
+	//set cookie
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Signup_Authorization", tokenString["accessToken"], 3600*24*30, "/", " ", false, true)
+
 	response := response.SuccessResponse(200, "otp send successfully", nil)
 	c.JSON(http.StatusOK, response)
 }
@@ -60,50 +74,40 @@ func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 // Verify OTP godoc
 // @summary api for Verify otp of user
 // @description Enter otp
-// @tags OTP Verification
-// parameters:- name: inputs in: query description: The inputs parameter as code required: true type: stri format: code name: phoneNumber in: query description: The phone number parameter as string required: true type: string
-// @Router /signup/verifyotp [post]
+// @tags OTP Verification for user signup
+// @Param        inputs   body     req.OtpStruct{}  true  "Input Field"
+// @Router /signup/verify_otp [post]
 // @Success 200 {object} response.Response{} "error while verifying otp"
 // @Failure 400 {object} response.Response{}  "otp  successfully verified"
 // verify otp
 func (cr *UserHandler) VerifyOTP(c *gin.Context) {
-	//bind body details
-	phonenumber := c.Query("phone")
-	code := c.Query("code")
-	// var body req.OtpStruct
-	// if err := c.ShouldBindJSON(&body); err != nil {
-	// 	res := response.ErrorResponse(400, "error while getting otp from user", err.Error(), nil)
-	// 	utils.ResponseJSON(c, res)
-	// 	return
-	// }
+	phonenumber, err := middlware.GetPhn(c, "Signup_Authorization")
+	if err != nil {
+		response := response.ErrorResponse(400, "error while getting id from cookie", err.Error(), phonenumber)
+		c.JSON(400, response)
+		return
+	}
 
-	if phonenumber == " " || code == " " {
-		err := errors.New("please enter otp")
-		res := response.ErrorResponse(400, "invalid otp", err.Error(), nil)
+	var body req.OtpStruct
+	if err := c.ShouldBindJSON(&body); err != nil {
+		res := response.ErrorResponse(400, "error while getting otp from user", err.Error(), nil)
 		utils.ResponseJSON(c, res)
 		return
 	}
 
 	// verifying otp
 
-	err := cr.userUsecase.VerifyOtp(c, phonenumber, code)
+	err1 := cr.userUsecase.VerifyOtp(c, phonenumber, body.OTP)
 
-	if err != nil {
+	if err1 != nil {
 		res := response.ErrorResponse(400, "error while verifying otp", err.Error(), nil)
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
 
-	if err != nil {
-		response := response.ErrorResponse(400, "failed to add user", err.Error(), "can't add user")
+	err2 := cr.userUsecase.UpdateStatus(c, user)
 
-		c.JSON(400, response)
-		return
-	}
-
-	err1 := cr.userUsecase.UpdateStatus(c, user)
-
-	if err1 != nil {
+	if err2 != nil {
 		res := response.ErrorResponse(400, "can't update status", err.Error(), nil)
 		c.JSON(http.StatusBadRequest, res)
 		return
@@ -114,6 +118,14 @@ func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 
 }
 
+// Registration godoc
+// @summary api for complete registration of user
+// @description Enter user details
+// @tags Complete Registration
+// @Param        inputs   body     domain.Users{}  true  "Input Field"
+// @Router /signup/register [post]
+// @Success 200 {object} response.Response{} "can't complete registration"
+// @Failure 400 {object} response.Response{}  "Registration completed please login"
 func (cr *UserHandler) Register(c *gin.Context) {
 	// var user domain.Users
 	if err := c.ShouldBindJSON(&user); err != nil {

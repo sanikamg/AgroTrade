@@ -17,8 +17,7 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 	//signup
 	signup := api.Group("/signup")
 	{
-		signup.POST("/loginorsignup", userHandler.SendOtpPhn)
-		signup.GET("/verify_otp", userHandler.VerifyOTP)
+		signup.POST("/", userHandler.SendOtpPhn)
 		signup.POST("/register", userHandler.Register)
 	}
 	//logout
@@ -90,5 +89,10 @@ func UserRoutes(api *gin.RouterGroup, userHandler *handler.UserHandler, productH
 			forgotverification.POST("/otpverification", userHandler.VerifyOTPForgotPass)
 			forgotverification.POST("/newpass", userHandler.ForgotPassword)
 		}
+	}
+
+	api.Use(middlware.AuthenticateUserSignup)
+	{
+		signup.POST("/verify_otp", userHandler.VerifyOTP)
 	}
 }
