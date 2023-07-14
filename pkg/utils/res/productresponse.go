@@ -27,6 +27,7 @@ type OrderResponse struct {
 	Total_Amount   float64 `json:"total_amount"  gorm:"not null" `
 	Order_Status   string  `json:"order_status"`
 	Payment_Status string  `json:"payment_status"   `
+	DeliveryStatus string  `json:"delivery_status"`
 	Address_Id     uint    `json:"address_id" `
 	Payment_Method string  `json:"payment_method"`
 }
@@ -59,7 +60,7 @@ type PaymentMethodResponse struct {
 
 type CouponResponse struct {
 	Discount int
-	Validity int64
+	Validity string
 }
 type CouponList struct {
 	Coupon_id uint
@@ -89,4 +90,10 @@ type ReturnResponse struct {
 	ReturnReason string    `json:"return_reason" gorm:"not null"`
 	RefundAmount float64   `json:"refund_amount" gorm:"not null"`
 	ReturnStatus string    `json:"return_status"`
+}
+type SalesResponse struct {
+	TotalOrder     int64 `json:"total_order"`
+	DeliveredOrder int64 `json:"delivered_order"`
+	PendingOrder   int64 `json:"pending_order"`
+	CancelledOrder int64 `json:"canncelled_order"`
 }

@@ -14,6 +14,7 @@ import (
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -491,7 +492,7 @@ func (pu *ProductUsecase) UpdateStatusRazorpay(c context.Context, order_id uint)
 	return orderResp, nil
 }
 
-// sales report
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>sales report>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 func (pu *ProductUsecase) SalesReport(c context.Context, salesData req.ReqSalesReport) ([]res.SalesReport, utils.Metadata, error) {
 	salesReport, metadata, err := pu.productRepo.SalesReport(c, salesData)
 	if err != nil {
@@ -500,11 +501,36 @@ func (pu *ProductUsecase) SalesReport(c context.Context, salesData req.ReqSalesR
 	return salesReport, metadata, nil
 }
 
-// return
+func (pu *ProductUsecase) SalesData(sDate, Edate time.Time) (res.SalesResponse, error) {
+	salesData, err := pu.productRepo.SalesData(sDate, Edate)
+	if err != nil {
+		return res.SalesResponse{}, err
+	}
+
+	return salesData, nil
+}
+
+func (pu *ProductUsecase) FindPendingDelivery(c context.Context, pagination utils.Pagination) ([]res.SalesReport, utils.Metadata, error) {
+	pendings, metadata, err := pu.productRepo.FindPendingDelivery(c, pagination)
+	if err != nil {
+		return []res.SalesReport{}, utils.Metadata{}, err
+	}
+	return pendings, metadata, nil
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> return>...>....>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 func (pu *ProductUsecase) ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error) {
 	returnResp, err := pu.productRepo.ReturnRequest(c, returnOrder)
 	if err != nil {
 		return res.ReturnResponse{}, err
 	}
 	return returnResp, nil
+}
+
+func (pu *ProductUsecase) VerifyOrderID(c context.Context, id uint, orderid uint) error {
+	err := pu.productRepo.VerifyOrderID(c, id, orderid)
+	if err != nil {
+		return err
+	}
+	return nil
 }

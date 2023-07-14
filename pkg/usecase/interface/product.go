@@ -7,6 +7,7 @@ import (
 	"golang_project_ecommerce/pkg/utils/req"
 	"golang_project_ecommerce/pkg/utils/res"
 	"mime/multipart"
+	"time"
 )
 
 type ProductUsecase interface {
@@ -65,7 +66,13 @@ type ProductUsecase interface {
 	//verify and clear cart
 	DeleteCart(c context.Context, usr_id uint) error
 	UpdateStatusRazorpay(c context.Context, order_id uint) (res.OrderResponse, error)
+
 	//sales report
 	SalesReport(c context.Context, salesData req.ReqSalesReport) ([]res.SalesReport, utils.Metadata, error)
+	SalesData(sDate, Edate time.Time) (res.SalesResponse, error)
+	FindPendingDelivery(c context.Context, pagination utils.Pagination) ([]res.SalesReport, utils.Metadata, error)
+
+	//return
 	ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error)
+	VerifyOrderID(c context.Context, id uint, orderid uint) error
 }

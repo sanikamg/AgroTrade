@@ -67,14 +67,14 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler *handler.AdminHandler, produ
 			paymentmethod.DELETE("/delete", productHandler.DeleteMethod)
 		}
 
-		order := api.Group("/order")
+		Dashboard := api.Group("/dashboard")
 		{
-			order.GET("/listall", productHandler.GetAllOrders)
+			Dashboard.GET("/salesreport", productHandler.SalesReport)
+			Dashboard.GET("/getallorders", productHandler.GetAllOrders)
+			Dashboard.GET("/getallproducts", productHandler.GetAllProducts)
+			Dashboard.GET("/salesdata", productHandler.Statistics)
+			Dashboard.GET("/pendingdelivery", productHandler.FindPendingDelivery)
 		}
 
-		salesReport := api.Group("/salesreport")
-		{
-			salesReport.GET("/", productHandler.SalesReport)
-		}
 	}
 }

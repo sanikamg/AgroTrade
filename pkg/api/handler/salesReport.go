@@ -45,12 +45,13 @@ func (pd *ProductHandler) SalesReport(c *gin.Context) {
 			PageSize: pagesize,
 		},
 	}
-	salesReport, _, err := pd.productUsecase.SalesReport(c, salesData)
+	salesReport,_, _ := pd.productUsecase.SalesReport(c, salesData)
 	if salesReport == nil {
-		response := response.ErrorResponse(400, "There is no sales report on this period", err.Error(), " ")
+		response := response.ErrorResponse(400, "There is no sales report on this period", " ", " ")
 		c.JSON(400, response)
+		return
 	}
-	fmt.Println(salesReport)
+
 	// Create a new PDF document
 	pdf := gofpdf.New("P", "mm", "A4", "")
 

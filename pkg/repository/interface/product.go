@@ -6,6 +6,7 @@ import (
 	"golang_project_ecommerce/pkg/utils"
 	"golang_project_ecommerce/pkg/utils/req"
 	"golang_project_ecommerce/pkg/utils/res"
+	"time"
 )
 
 type ProductRepository interface {
@@ -77,8 +78,11 @@ type ProductRepository interface {
 
 	//salesreport
 	SalesReport(c context.Context, salesData req.ReqSalesReport) ([]res.SalesReport, utils.Metadata, error)
+	SalesData(sDate, Edate time.Time) (res.SalesResponse, error)
+	FindPendingDelivery(c context.Context, pagination utils.Pagination) ([]res.SalesReport, utils.Metadata, error)
 
 	//return
 
 	ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error)
+	VerifyOrderID(c context.Context, id uint, orderid uint) error
 }

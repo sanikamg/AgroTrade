@@ -9,6 +9,7 @@ import (
 	"golang_project_ecommerce/pkg/utils"
 	"golang_project_ecommerce/pkg/utils/req"
 	"golang_project_ecommerce/pkg/utils/res"
+	"time"
 
 	"github.com/lib/pq"
 	"gorm.io/gorm"
@@ -547,7 +548,7 @@ func (pd *productDatabase) ListAllCoupons(c context.Context, pagination utils.Pa
 		return []res.CouponList{}, utils.Metadata{}, err
 	}
 
-	query := `SELECT coupon_id,discount, to_char(to_timestamp(validity), 'YYYY-MM-DD') AS validity FROM coupons LIMIT $1 OFFSET $2;`
+	query := `SELECT coupon_id,discount,validity FROM coupons LIMIT $1 OFFSET $2;`
 
 	err := db.Raw(query, pagination.Limit(), pagination.Offset()).Scan(&coupons).Error
 	if err != nil {
@@ -653,7 +654,7 @@ func (pd *productDatabase) CreateOrder(c context.Context, order domain.Order) (r
 		return res.OrderResponse{}, errors.New("failed to place order")
 	}
 
-	query := `select o.order_id,o.total_amount,o.payment_status,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
+	query := `select o.order_id,o.total_amount,o.payment_status,o.order_status,o.delivery_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
 	err1 := pd.DB.Raw(query, order.Order_Id).Scan(&orderdetails).Error
 	if err1 != nil {
 		return res.OrderResponse{}, errors.New("failed to display order details")
@@ -669,7 +670,7 @@ func (pd *productDatabase) UpdateOrderDetails(c context.Context, uporder req.Upd
 	if err != nil {
 		return res.OrderResponse{}, errors.New("Error while updating order deatails")
 	}
-	query1 := `select o.order_id,o.total_amount,o.payment_status,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
+	query1 := `select o.order_id,o.total_amount,o.payment_status,o.order_status,o.delivery_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where o.order_id=?`
 	err1 := pd.DB.Raw(query1, uporder.Order_Id).Scan(&orderdetails).Error
 	if err1 != nil {
 		return res.OrderResponse{}, errors.New("failed to display order details")
@@ -688,7 +689,7 @@ func (pd *productDatabase) ListAllOrders(c context.Context, pagination utils.Pag
 		return []res.OrderResponse{}, utils.Metadata{}, err
 	}
 
-	query := `select o.order_id,o.total_amount,o.payment_status,o.order_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where user_id=$1 limit $2 offset $3;`
+	query := `select o.order_id,o.total_amount,o.payment_status,o.order_status,o.delivery_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id where user_id=$1 limit $2 offset $3;`
 
 	err := db.Raw(query, usrid, pagination.Limit(), pagination.Offset()).Scan(&orders).Error
 	if err != nil {
@@ -711,7 +712,7 @@ func (pd *productDatabase) GetAllOrders(c context.Context, pagination utils.Pagi
 		return []res.OrderResponse{}, utils.Metadata{}, err
 	}
 
-	query := `select o.order_id,o.total_amount,o.order_status,o.payment_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id limit $1 offset $2;`
+	query := `select o.order_id,o.total_amount,o.order_status,o.payment_status,o.delivery_status,o.address_id,p.payment_method from orders as o left join payment_methods as p on o.payment_method_id=p.method_id limit $1 offset $2;`
 
 	err := db.Raw(query, pagination.Limit(), pagination.Offset()).Scan(&orders).Error
 	if err != nil {
@@ -725,12 +726,20 @@ func (pd *productDatabase) GetAllOrders(c context.Context, pagination utils.Pagi
 
 func (pd *productDatabase) DeleteOrder(c context.Context, order_id uint) error {
 	var order domain.Order
-	err := pd.DB.Where("order_id = ?", order_id).Delete(&order).Error
-
-	if err != nil {
-		return errors.New("faileed to delete orders")
+	status := "order cancelled"
+	query := `UPDATE orders SET order_status=? WHERE order_id=?`
+	err1 := pd.DB.Raw(query, status, order_id).Scan(&order).Error
+	if err1 != nil {
+		return errors.New("failed to update cancel order details")
 
 	}
+
+	err := pd.DB.Where("order_id = ?", order_id).Delete(&order).Error
+	if err != nil {
+		return errors.New("failed to delete order")
+
+	}
+
 	return nil
 }
 
@@ -745,8 +754,8 @@ func (pd *productDatabase) PlaceOrder(c context.Context, order domain.Order) (re
 	}
 
 	//after applying coupon must be deleted
-	query2 := `DELETE FROM coupons WHERE coupon_id=?`
-	err2 := pd.DB.Raw(query2, order.Applied_Coupon_id).Scan(coup).Error
+	//query2 := `DELETE FROM coupons WHERE coupon_id=?`
+	err2 := pd.DB.Where("coupon_id=?", order.Applied_Coupon_id).Delete(&coup).Error
 	if err2 != nil {
 		return res.PaymentResponse{}, errors.New("error while deleting used coupon")
 	}
@@ -884,22 +893,22 @@ func (pd *productDatabase) SalesReport(c context.Context, salesData req.ReqSales
 			u.username,
 			u.email,
 			o.order_date,
-			o.total_amount,
+			o.total_amount AS order_total_price,
 			o.order_status,
-			p.payment_method,
+			o.delivery_status,
+			p.payment_method AS payment_type,
 			o.payment_status
 		FROM
 			orders AS o
 			LEFT JOIN users AS u ON o.user_id = u.user_id
 			LEFT JOIN payment_methods AS p ON o.payment_method_id = p.method_id
 			WHERE o.order_date >= $1 AND o.order_date <= $2
-			ORDER BY o.order_date
 		LIMIT $3 OFFSET $4
 	`
 
-	rows, err := db.Raw(query, salesData.StartDate, salesData.EndDate, salesData.Pagination.Page, salesData.Pagination.PageSize).Rows()
+	rows, err := db.Raw(query, salesData.StartDate, salesData.EndDate, salesData.Pagination.Limit(), salesData.Pagination.Offset()).Rows()
 	if err != nil {
-		return []res.SalesReport{}, utils.Metadata{}, err
+		return []res.SalesReport{}, utils.Metadata{}, errors.New("query didn't work")
 	}
 	defer rows.Close()
 
@@ -912,25 +921,125 @@ func (pd *productDatabase) SalesReport(c context.Context, salesData req.ReqSales
 			&sale.Email,
 			&sale.OrderDate,
 			&sale.OrderTotalPrice,
-
 			&sale.OrderStatus,
+			&sale.DeliveryStatus,
 			&sale.PaymentType,
 			&sale.PaymentStatus,
 		)
-		fmt.Println(sale)
+
 		if err != nil {
-			return []res.SalesReport{}, utils.Metadata{}, err
+			return []res.SalesReport{}, utils.Metadata{}, errors.New("scaning didn't work")
 		}
 		sales = append(sales, sale)
 	}
-	fmt.Println(salesData)
+
 	// Compute metadata
 	metadata := utils.ComputeMetadata(&totalRecords, &salesData.Pagination.Page, &salesData.Pagination.PageSize)
 
 	return sales, metadata, nil
 }
 
-// return request
+func (pd *productDatabase) SalesData(sDate, eDate time.Time) (res.SalesResponse, error) {
+	var salesData res.SalesResponse
+
+	query := `SELECT COUNT(*) FROM orders WHERE order_date >= $1 AND order_date <= $2`
+	err := pd.DB.Raw(query, sDate, eDate).Scan(&salesData.TotalOrder).Error
+	if err != nil {
+		return res.SalesResponse{}, errors.New("failed to count total orders")
+	}
+
+	status := "delivered"
+	query1 := `SELECT COUNT(*) FROM orders WHERE order_date >= $1 AND order_date <= $2 AND delivery_status = $3`
+	err1 := pd.DB.Raw(query1, sDate, eDate, status).Scan(&salesData.DeliveredOrder).Error
+	if err1 != nil {
+		return res.SalesResponse{}, errors.New("failed to count delivered orders")
+	}
+
+	status1 := "Pending"
+	query2 := `SELECT COUNT(*) FROM orders WHERE order_date >= $1 AND order_date <= $2 AND delivery_status = $3 AND order_status != 'order cancelled'`
+	err2 := pd.DB.Raw(query2, sDate, eDate, status1).Scan(&salesData.PendingOrder).Error
+	if err2 != nil {
+		return res.SalesResponse{}, errors.New("failed to count pending orders")
+	}
+
+	status2 := "order cancelled"
+	query3 := `SELECT COUNT(*) FROM orders WHERE order_date >= $1 AND order_date <= $2 AND order_status = $3`
+	err3 := pd.DB.Raw(query3, sDate, eDate, status2).Scan(&salesData.CancelledOrder).Error
+	if err3 != nil {
+		return res.SalesResponse{}, errors.New("failed to count cancelled orders")
+	}
+
+	return salesData, nil
+}
+
+func (pd *productDatabase) FindPendingDelivery(c context.Context, pagination utils.Pagination) ([]res.SalesReport, utils.Metadata, error) {
+
+	var sales []res.SalesReport
+	var totalRecords int64
+
+	db := pd.DB.Model(&domain.Order{})
+
+	// Count all records
+	if err := db.Count(&totalRecords).Error; err != nil {
+		return []res.SalesReport{}, utils.Metadata{}, err
+	}
+
+	query := `
+		SELECT
+			u.user_id,
+			u.username,
+			u.email,
+			o.order_date,
+			o.total_amount AS order_total_price,
+			o.order_status,
+			o.delivery_status,
+			p.payment_method,
+			o.payment_status
+		FROM
+			orders AS o
+			LEFT JOIN users AS u ON o.user_id = u.user_id
+			LEFT JOIN payment_methods AS p ON o.payment_method_id = p.method_id
+			WHERE o.delivery_status=$1 AND o.order_status=$2
+		LIMIT $3 OFFSET $4
+	`
+	status1 := "Pending"
+	status2 := "order confirmed"
+	rows, err := db.Raw(query, status1, status2, pagination.Limit(), pagination.Offset()).Rows()
+	if err != nil {
+		return []res.SalesReport{}, utils.Metadata{}, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var sale res.SalesReport
+
+		err := rows.Scan(
+			&sale.UserID,
+			&sale.Name,
+			&sale.Email,
+			&sale.OrderDate,
+			&sale.OrderTotalPrice,
+			&sale.OrderStatus,
+			&sale.DeliveryStatus,
+			&sale.PaymentType,
+			&sale.PaymentStatus,
+		)
+
+		if err != nil {
+			return []res.SalesReport{}, utils.Metadata{}, err
+		}
+		sales = append(sales, sale)
+
+	}
+
+	// Compute metadata
+	metadata := utils.ComputeMetadata(&totalRecords, &pagination.Page, &pagination.PageSize)
+
+	return sales, metadata, nil
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>// return request//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 func (pd *productDatabase) ReturnRequest(c context.Context, returnOrder domain.OrderReturn) (res.ReturnResponse, error) {
 	var returnres res.ReturnResponse
 	err := pd.DB.Create(&returnOrder).Error
@@ -944,4 +1053,13 @@ func (pd *productDatabase) ReturnRequest(c context.Context, returnOrder domain.O
 		return res.ReturnResponse{}, errors.New("failed to display order details")
 	}
 	return returnres, nil
+}
+
+func (pd productDatabase) VerifyOrderID(c context.Context, id uint, orderid uint) error {
+	var order domain.Order
+	err := pd.DB.Where("user_id=? AND order_id=?", id, orderid).First(&order).Error
+	if err != nil {
+		return errors.New("invalid order id")
+	}
+	return nil
 }

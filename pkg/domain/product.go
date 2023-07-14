@@ -34,6 +34,7 @@ type Image struct {
 // cart
 
 type Cart_item struct {
+	gorm.Model
 	Cart_Id     uint    ` gorm:" serial primaryKey;autoIncrement:true;unique"`
 	User_Id     uint    `json:"user_id"   `
 	Product_Id  uint    `json:"product_id" `
@@ -43,6 +44,7 @@ type Cart_item struct {
 
 // order
 type Order struct {
+	gorm.Model
 	Order_Id          uint      ` gorm:" serial primaryKey;autoIncrement:true;unique"`
 	User_Id           uint      `json:"user_id"  gorm:"not null" `
 	Applied_Coupon_id uint      `json:"applied_coupon_id,omitempty"`
@@ -50,6 +52,7 @@ type Order struct {
 	PaymentMethodID   uint      `json:"paymentmethod_id"  gorm:"not null" `
 	Payment_Status    string    `json:"payment_status"`
 	Order_Status      string    `json:"order_status"`
+	DeliveryStatus    string    `json:"delivery_status"`
 	Address_Id        uint      `json:"address_id" `
 	OrderDate         time.Time `json:"order_date"`
 }
