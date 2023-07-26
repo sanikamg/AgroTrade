@@ -15,14 +15,14 @@ import (
 )
 
 // Create order godoc
-// @summary api for create order
-// @description Enter address id and method id
-// @tags Create Order
-// @Param page query int true "address_id" format(int32)
-// @Param pagesize query int true "paymentmethod_id" format(int32)
-// @Router /order/create [post]
-// @Success 200 {object} response.Response{} "successfully  created order"
-// @Failure 400 {object} response.Response{}  "failed to create order"
+//	@summary		api for create order
+//	@description	Enter address id and method id
+//	@tags			Create Order
+//	@Param			page		query	int	true	"address_id"		format(int32)
+//	@Param			pagesize	query	int	true	"paymentmethod_id"	format(int32)
+//	@Router			/order/create [post]
+//	@Success		200	{object}	response.Response{}	"successfully  created order"
+//	@Failure		400	{object}	response.Response{}	"failed to create order"
 func (pd *ProductHandler) CreateOrder(c *gin.Context) {
 	var order domain.Order
 	addressid, _ := strconv.Atoi(c.Query("address_id"))

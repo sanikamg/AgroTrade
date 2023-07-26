@@ -31,13 +31,13 @@ func NewUserhandler(usecase services.UserUsecase) *UserHandler {
 var user domain.Users
 
 // SendOtpToPhone godoc
-// @summary api for user to send otp to phone
-// @description Enter phone number
-// @tags SignUp For User
-// @Param        inputs   body     domain.Users{}  true  "Input Field"
-// @Router /signup/ [post]
-// @Success 200 {object} response.Response{} "error while sending otp"
-// @Failure 400 {object} response.Response{}  "otp send successfully"
+//	@summary		api for user to send otp to phone
+//	@description	Enter phone number
+//	@tags			SignUp For User
+//	@Param			inputs	body	domain.Users{}	true	"Input Field"
+//	@Router			/signup/ [post]
+//	@Success		200	{object}	response.Response{}	"error while sending otp"
+//	@Failure		400	{object}	response.Response{}	"otp send successfully"
 // send otp to phn number
 func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -72,13 +72,13 @@ func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 }
 
 // Verify OTP godoc
-// @summary api for Verify otp of user
-// @description Enter otp
-// @tags OTP Verification for user signup
-// @Param        inputs   body     req.OtpStruct{}  true  "Input Field"
-// @Router /signup/verify_otp [post]
-// @Success 200 {object} response.Response{} "error while verifying otp"
-// @Failure 400 {object} response.Response{}  "otp  successfully verified"
+//	@summary		api for Verify otp of user
+//	@description	Enter otp
+//	@tags			OTP Verification for user signup
+//	@Param			inputs	body	req.OtpStruct{}	true	"Input Field"
+//	@Router			/signup/verify_otp [post]
+//	@Success		200	{object}	response.Response{}	"error while verifying otp"
+//	@Failure		400	{object}	response.Response{}	"otp  successfully verified"
 // verify otp
 func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 	phonenumber, err := middlware.GetPhn(c, "Signup_Authorization")
@@ -119,13 +119,13 @@ func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 }
 
 // Registration godoc
-// @summary api for complete registration of user
-// @description Enter user details
-// @tags Complete Registration
-// @Param        inputs   body     domain.Users{}  true  "Input Field"
-// @Router /signup/register [post]
-// @Success 200 {object} response.Response{} "can't complete registration"
-// @Failure 400 {object} response.Response{}  "Registration completed please login"
+//	@summary		api for complete registration of user
+//	@description	Enter user details
+//	@tags			Complete Registration
+//	@Param			inputs	body	domain.Users{}	true	"Input Field"
+//	@Router			/signup/register [post]
+//	@Success		200	{object}	response.Response{}	"can't complete registration"
+//	@Failure		400	{object}	response.Response{}	"Registration completed please login"
 func (cr *UserHandler) Register(c *gin.Context) {
 	// var user domain.Users
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -153,16 +153,16 @@ func (cr *UserHandler) Register(c *gin.Context) {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>userlogin>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // UserLogin godoc
-// @summary api for user to login
-// @description Enter user_name  with password
-// @security ApiKeyAuth
-// @tags User Login
-// @id UserLogin
-// @Param        inputs   body     req.LoginStruct{}   true  "Input Field"
-// @Router /login [post]
-// @Success 200 {object} response.Response{} "successfully logged in"
-// @Failure 400 {object} response.Response{}  "invalid input"
-// @Failure 500 {object} response.Response{}  "faild to generat JWT"
+//	@summary		api for user to login
+//	@description	Enter user_name  with password
+//	@security		ApiKeyAuth
+//	@tags			User Login
+//	@id				UserLogin
+//	@Param			inputs	body	req.LoginStruct{}	true	"Input Field"
+//	@Router			/login [post]
+//	@Success		200	{object}	response.Response{}	"successfully logged in"
+//	@Failure		400	{object}	response.Response{}	"invalid input"
+//	@Failure		500	{object}	response.Response{}	"faild to generat JWT"
 func (cr *UserHandler) UserLogin(c *gin.Context) {
 	// bind body details
 	var body req.LoginStruct

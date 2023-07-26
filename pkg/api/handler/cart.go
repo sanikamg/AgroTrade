@@ -78,6 +78,7 @@ func (ph *ProductHandler) AddProductToCart(c *gin.Context) {
 
 }
 
+
 func (ph *ProductHandler) ViewCart(c *gin.Context) {
 	page, err := strconv.Atoi(c.Query("page"))
 	if err != nil {
@@ -110,6 +111,8 @@ func (ph *ProductHandler) ViewCart(c *gin.Context) {
 	c.JSON(200, response)
 
 }
+
+
 
 func (ph *ProductHandler) RemoveProductFromCart(c *gin.Context) {
 	product_id, err := strconv.Atoi(c.Query("productid"))

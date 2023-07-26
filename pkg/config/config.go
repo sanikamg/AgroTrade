@@ -34,7 +34,7 @@ func LoadConfig() (Config, error) {
 	//viper.AddConfigPath("./")
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("/home/user/Documents/Project/AgroTrade")
+	viper.AddConfigPath("./")
 
 	// Read in the configuration file
 	err := viper.ReadInConfig()
