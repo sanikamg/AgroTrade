@@ -1,8 +1,6 @@
 package handler
 
 import (
-	
-	
 	"errors"
 	"golang_project_ecommerce/pkg/auth"
 	"golang_project_ecommerce/pkg/common/response"
@@ -30,12 +28,15 @@ func NewAdminHandler(usecase services.AdminUsecase) *AdminHandler {
 var admin domain.AdminDetails
 
 func (ah *AdminHandler) AdminSignup(c *gin.Context) {
-	if err := c.ShouldBindJSON(&admin); err != nil {
+	var admin domain.AdminDetails
+	var phone req.Phn
+	if err := c.ShouldBindJSON(&phone); err != nil {
 		res := response.ErrorResponse(400, "error while getting admin details", err.Error(), admin)
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
 
+	admin.Phone = phone.Phone
 	if _, err := verification.SendOtp("+91" + admin.Phone); err != nil {
 		res := response.ErrorResponse(400, "error while sending otp", err.Error(), admin)
 		c.JSON(http.StatusBadRequest, res)
@@ -44,7 +45,7 @@ func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 
 	response := response.SuccessResponse(200, "otp send successfully", nil)
 	c.JSON(http.StatusOK, response)
-	
+
 }
 
 func (ad *AdminHandler) VerifyOTP(c *gin.Context) {
@@ -141,7 +142,7 @@ func (ad *AdminHandler) AdminLogin(c *gin.Context) {
 
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Admin_Authorization", tokenString["accessToken"], 3600*24*30, "/", " ", false, true)
-	
+
 	response := response.SuccessResponse(200, "Successfully logged in", message)
 
 	c.JSON(http.StatusOK, response)

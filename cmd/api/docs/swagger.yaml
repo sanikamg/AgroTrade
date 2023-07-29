@@ -66,6 +66,11 @@ definitions:
     required:
     - otp
     type: object
+  req.Phn:
+    properties:
+      phone:
+        type: string
+    type: object
   response.Response:
     properties:
       data: {}
@@ -238,7 +243,7 @@ paths:
         name: inputs
         required: true
         schema:
-          $ref: '#/definitions/domain.Users'
+          $ref: '#/definitions/req.Phn'
       responses:
         "200":
           description: error while sending otp
@@ -272,7 +277,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: api for complete registration of user
       tags:
-      - Complete Registration
+      - SignUp For User
   /signup/verify_otp:
     post:
       description: Enter otp
@@ -294,5 +299,5 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: api for Verify otp of user
       tags:
-      - OTP Verification for user signup
+      - SignUp For User
 swagger: "2.0"

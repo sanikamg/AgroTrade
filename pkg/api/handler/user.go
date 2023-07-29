@@ -31,21 +31,26 @@ func NewUserhandler(usecase services.UserUsecase) *UserHandler {
 var user domain.Users
 
 // SendOtpToPhone godoc
+//
 //	@summary		api for user to send otp to phone
 //	@description	Enter phone number
 //	@tags			SignUp For User
-//	@Param			inputs	body	domain.Users{}	true	"Input Field"
+//	@Param			inputs	body	req.Phn	true	"Input Field"
 //	@Router			/signup/ [post]
 //	@Success		200	{object}	response.Response{}	"error while sending otp"
 //	@Failure		400	{object}	response.Response{}	"otp send successfully"
+//
 // send otp to phn number
 func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
-	if err := c.ShouldBindJSON(&user); err != nil {
-		res := response.ErrorResponse(400, "error while getting  the data from user side", err.Error(), user)
-
+	var user domain.Users
+	var phone req.Phn
+	if err := c.ShouldBindJSON(&phone); err != nil {
+		res := response.ErrorResponse(400, "error while getting admin details", err.Error(), admin)
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
+
+	user.Phone = phone.Phone
 
 	err := uh.userUsecase.SendOtpPhn(c, user)
 	if err != nil {
@@ -72,13 +77,15 @@ func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 }
 
 // Verify OTP godoc
+//
 //	@summary		api for Verify otp of user
 //	@description	Enter otp
-//	@tags			OTP Verification for user signup
+//	@tags			SignUp For User
 //	@Param			inputs	body	req.OtpStruct{}	true	"Input Field"
 //	@Router			/signup/verify_otp [post]
 //	@Success		200	{object}	response.Response{}	"error while verifying otp"
 //	@Failure		400	{object}	response.Response{}	"otp  successfully verified"
+//
 // verify otp
 func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 	phonenumber, err := middlware.GetPhn(c, "Signup_Authorization")
@@ -119,9 +126,10 @@ func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 }
 
 // Registration godoc
+//
 //	@summary		api for complete registration of user
 //	@description	Enter user details
-//	@tags			Complete Registration
+//	@tags			SignUp For User
 //	@Param			inputs	body	domain.Users{}	true	"Input Field"
 //	@Router			/signup/register [post]
 //	@Success		200	{object}	response.Response{}	"can't complete registration"
@@ -153,6 +161,7 @@ func (cr *UserHandler) Register(c *gin.Context) {
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>userlogin>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // UserLogin godoc
+//
 //	@summary		api for user to login
 //	@description	Enter user_name  with password
 //	@security		ApiKeyAuth

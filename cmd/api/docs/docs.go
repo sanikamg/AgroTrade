@@ -259,7 +259,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Users"
+                            "$ref": "#/definitions/req.Phn"
                         }
                     }
                 ],
@@ -283,7 +283,7 @@ const docTemplate = `{
             "post": {
                 "description": "Enter user details",
                 "tags": [
-                    "Complete Registration"
+                    "SignUp For User"
                 ],
                 "summary": "api for complete registration of user",
                 "parameters": [
@@ -317,7 +317,7 @@ const docTemplate = `{
             "post": {
                 "description": "Enter otp",
                 "tags": [
-                    "OTP Verification for user signup"
+                    "SignUp For User"
                 ],
                 "summary": "api for Verify otp of user",
                 "parameters": [
@@ -438,6 +438,14 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 6,
                     "minLength": 6
+                }
+            }
+        },
+        "req.Phn": {
+            "type": "object",
+            "properties": {
+                "phone": {
+                    "type": "string"
                 }
             }
         },
