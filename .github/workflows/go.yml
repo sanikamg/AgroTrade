@@ -43,7 +43,7 @@ jobs:
         username: ubuntu
         key: ${{secrets.SSH_KEY}}
 
-    script: |
+        script: |
             echo "Connected to EC2 instance"
             cd /home/ubuntu/go/AgroTrade/
             git pull
