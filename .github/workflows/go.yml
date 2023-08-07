@@ -28,10 +28,12 @@ jobs:
     - name : install make
       run: |
         sudo apt update
-        sudo apt istall -y make
+        sudo apt install -y make
 
     - name : Test
       run : go test ./...
+
+    
       
          
 
