@@ -127,9 +127,10 @@ func (pd *userDatabase) GetCategoryByName(c context.Context, categoryname string
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>user management>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 func (ud *userDatabase) FindUserById(c context.Context, id int) (domain.Users, error) {
 	var user domain.Users
-	err := ud.DB.Raw("select *from users where user_id=?", id).Scan(&user).Error
+	query := `select * from users where user_id=?`
+	err := ud.DB.Raw(query, id).Scan(&user).Error
 	if err != nil {
-		return domain.Users{}, errors.New("user didn't exist")
+		return domain.Users{}, errors.New("user doesn't exist")
 	}
 	return user, nil
 }
@@ -242,5 +243,3 @@ func (ud *userDatabase) ForgotPassword(c context.Context, usrphn string, newpass
 	}
 	return nil
 }
-
-

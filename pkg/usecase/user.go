@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"fmt"
 	"golang_project_ecommerce/pkg/domain"
 	interfaces "golang_project_ecommerce/pkg/repository/interface"
 	ser "golang_project_ecommerce/pkg/usecase/interface"
@@ -37,10 +38,12 @@ func (uu *UserUsecase) SendOtpPhn(c context.Context, phn domain.Users) error {
 		return errors.New("user already exists please login")
 	}
 	// Generate OTP code
+	fmt.Println("helloooooo")
+	fmt.Println(phn.Phone)
 
 	if _, err1 := verification.SendOtp("+91" + phn.Phone); err1 != nil {
 
-		return errors.New("can't send otp")
+		return errors.Join(errors.New("can't send otp"), err1)
 	}
 
 	return nil

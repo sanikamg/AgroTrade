@@ -14,4 +14,16 @@ run:
 golint:
 	golint ./...
 
+mockgen:
+	mockgen -source=pkg/repository/interface/user.go -destination=pkg/mock/userRepoMock/userRepoMock.go -package=mock
+
+usecasemockgen:
+	mockgen -source=pkg/usecase/interface/user.go -destination=pkg/mock/userUsecaseMock/userUsecaseMock.go -package=mock
+
+test:
+	go test 
+
+build:
+	go build -o build/bin/main cmd/api/main.go
+
 ##google-chrome --user-data-dir="~/chrome-dev-session" --disable-web-security
