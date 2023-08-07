@@ -47,6 +47,7 @@ jobs:
             echo "Connected to EC2 instance"
             cd /home/ubuntu/go/AgroTrade/
             git pull
+            go version 1.20.6
             go build cmd/api/
             sudo systemctl restart goweb.service
      
