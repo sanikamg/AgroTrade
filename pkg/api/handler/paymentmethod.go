@@ -10,9 +10,10 @@ import (
 )
 
 // PaymentMethod godoc
+//
 //	@summary		api for add payment method by admin
 //	@description	Enter payment method and maximum amount
-//	@tags			Add payment method
+//	@tags			payment method
 //	@Param			inputs	body	domain.PaymentMethod{}	true	"Input Field"
 //	@Router			/paymentmethod/add [post]
 //	@Success		200	{object}	response.Response{}	"successfully  added payment method"
@@ -35,14 +36,16 @@ func (ph *ProductHandler) AddpaymentMethod(c *gin.Context) {
 }
 
 // Get All PaymentMethods godoc
+//
 //	@Summary		Get all paymentmethods
 //	@Description	Get all products
-//	@tags			View all payment method
+//	@tags			payment method
 //	@Param			page		query	int	true	"Page"		format(int32)
 //	@Param			pagesize	query	int	true	"Page Size"	format(int32)
 //	@Router			/paymentmethod/view [get]
 //	@Success		200	{object}	response.Response{}	"successfully  displayed all prioducts"
 //	@Failure		400	{object}	response.Response{}	"ferror while getting data"
+//
 // to list all payment methods
 func (ph *ProductHandler) GetAllPaymentMethods(c *gin.Context) {
 	page, err := strconv.Atoi(c.Query("page"))
@@ -73,9 +76,10 @@ func (ph *ProductHandler) GetAllPaymentMethods(c *gin.Context) {
 }
 
 // Update PaymentMethod godoc
+//
 //	@summary		api for update payment method by admin
 //	@description	Enter payment method and maximum amount with id
-//	@tags			upadate payment method
+//	@tags			payment method
 //	@Param			inputs	body	domain.PaymentMethod{}	true	"Input Field"
 //	@Router			/paymentmethod/update [patch]
 //	@Success		200	{object}	response.Response{}	"successfully  updated payment method"
@@ -99,13 +103,15 @@ func (ph *ProductHandler) UpdatePaymentMethod(c *gin.Context) {
 }
 
 // Delete payment method godoc
+//
 //	@Summary		delete paymentmethod
 //	@Description	Delete payment methods
-//	@tags			Delete Payment method
+//	@tags			payment method
 //	@Param			page	query	int	true	"id"	format(int32)
 //	@Router			/paymentmethod/delete [delete]
 //	@Success		200	{object}	response.Response{}	"successfully  deleted method"
 //	@Failure		400	{object}	response.Response{}	"failed to delete method"
+//
 // to list all payment methods
 func (ph *ProductHandler) DeleteMethod(c *gin.Context) {
 	method_id, err := strconv.Atoi(c.Query("method_id"))
