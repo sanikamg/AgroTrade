@@ -107,7 +107,7 @@ const docTemplate = `{
             "post": {
                 "description": "Enter payment method and maximum amount",
                 "tags": [
-                    "Add payment method"
+                    "payment method"
                 ],
                 "summary": "api for add payment method by admin",
                 "parameters": [
@@ -141,7 +141,7 @@ const docTemplate = `{
             "delete": {
                 "description": "Delete payment methods",
                 "tags": [
-                    "Delete Payment method"
+                    "payment method"
                 ],
                 "summary": "delete paymentmethod",
                 "parameters": [
@@ -174,7 +174,7 @@ const docTemplate = `{
             "patch": {
                 "description": "Enter payment method and maximum amount with id",
                 "tags": [
-                    "upadate payment method"
+                    "payment method"
                 ],
                 "summary": "api for update payment method by admin",
                 "parameters": [
@@ -208,7 +208,7 @@ const docTemplate = `{
             "get": {
                 "description": "Get all products",
                 "tags": [
-                    "View all payment method"
+                    "payment method"
                 ],
                 "summary": "Get all paymentmethods",
                 "parameters": [

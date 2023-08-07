@@ -161,7 +161,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: api for add payment method by admin
       tags:
-      - Add payment method
+      - payment method
   /paymentmethod/delete:
     delete:
       description: Delete payment methods
@@ -183,7 +183,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: delete paymentmethod
       tags:
-      - Delete Payment method
+      - payment method
   /paymentmethod/update:
     patch:
       description: Enter payment method and maximum amount with id
@@ -205,7 +205,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: api for update payment method by admin
       tags:
-      - upadate payment method
+      - payment method
   /paymentmethod/view:
     get:
       description: Get all products
@@ -233,7 +233,7 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: Get all paymentmethods
       tags:
-      - View all payment method
+      - payment method
   /signup/:
     post:
       description: Enter phone number
