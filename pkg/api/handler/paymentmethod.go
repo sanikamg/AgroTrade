@@ -35,16 +35,16 @@ func (ph *ProductHandler) AddpaymentMethod(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-// Get All PaymentMethods godoc
+//	 PaymentMethods godoc
 //
-//	@Summary		Get all paymentmethods
-//	@Description	Get all products
-//	@tags			payment method
-//	@Param			page		query	int	true	"Page"		format(int32)
-//	@Param			pagesize	query	int	true	"Page Size"	format(int32)
-//	@Router			/paymentmethod/view [get]
-//	@Success		200	{object}	response.Response{}	"successfully  displayed all prioducts"
-//	@Failure		400	{object}	response.Response{}	"ferror while getting data"
+//		@Summary		Get all paymentmethods
+//		@Description	Get all products
+//		@tags			payment method
+//		@Param			page		query	int	true	"Page"		format(int32)
+//		@Param			pagesize	query	int	true	"Page Size"	format(int32)
+//		@Router			/paymentmethod/view [get]
+//		@Success		200	{object}	response.Response{}	"successfully  displayed all prioducts"
+//		@Failure		400	{object}	response.Response{}	"ferror while getting data"
 //
 // to list all payment methods
 func (ph *ProductHandler) GetAllPaymentMethods(c *gin.Context) {
@@ -75,7 +75,7 @@ func (ph *ProductHandler) GetAllPaymentMethods(c *gin.Context) {
 
 }
 
-// Update PaymentMethod godoc
+// PaymentMethods godoc
 //
 //	@summary		api for update payment method by admin
 //	@description	Enter payment method and maximum amount with id
@@ -102,7 +102,7 @@ func (ph *ProductHandler) UpdatePaymentMethod(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-// Delete payment method godoc
+// PaymentMethods godoc
 //
 //	@Summary		delete paymentmethod
 //	@Description	Delete payment methods
