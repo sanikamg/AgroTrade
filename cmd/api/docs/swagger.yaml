@@ -275,7 +275,7 @@ paths:
           description: Registration completed please login
           schema:
             $ref: '#/definitions/response.Response'
-      summary: api for complete registration of user
+      summary: api for complete registration hell hiii how are you
       tags:
       - SignUp For User
   /signup/verify_otp:
