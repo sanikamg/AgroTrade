@@ -127,7 +127,7 @@ func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 
 // Registration godoc
 //
-//	@summary		api for complete registration hii
+//	@summary		api for complete registration hii how are you
 //	@description	Enter user details
 //	@tags			SignUp For User
 //	@Param			inputs	body	domain.Users{}	true	"Input Field"
