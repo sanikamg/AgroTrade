@@ -48,7 +48,8 @@ jobs:
             cd /home/ubuntu/go/AgroTrade/
             git pull
             cd cmd/api
-            go build main.go
+            go version 
+            go build 
             sudo systemctl restart goweb.service
      
     
