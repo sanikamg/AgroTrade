@@ -285,7 +285,7 @@ const docTemplate = `{
                 "tags": [
                     "SignUp For User"
                 ],
-                "summary": "api for complete registration hii how are you hii",
+                "summary": "api for complete registration",
                 "parameters": [
                     {
                         "description": "Input Field",
