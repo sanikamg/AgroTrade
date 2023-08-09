@@ -8,6 +8,7 @@ swagger:
 wire: 
 	cd pkg/di && wire
 
+## run command
 run:
 	go run ./cmd/api/main.go
 
