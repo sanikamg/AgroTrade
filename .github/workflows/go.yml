@@ -36,6 +36,9 @@ jobs:
     - name : Build
       run  : make build
 
+    - name: Generate Swagger
+        run: make generate-swagger
+
     - name : connect to EC2 instance
       uses : appleboy/ssh-action@master
       with : 
