@@ -24,6 +24,6 @@ test:
 	go test 
 
 build:
-	go build -o build/bin/main cmd/api/main.go
+	go build ./cmd/api/
 
 ##google-chrome --user-data-dir="~/chrome-dev-session" --disable-web-security
