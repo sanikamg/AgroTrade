@@ -135,6 +135,7 @@ func (cr *UserHandler) VerifyOTP(c *gin.Context) {
 //	@Success		200	{object}	response.Response{}	"can't complete registration"
 //	@Failure		400	{object}	response.Response{}	"Registration completed please login"
 func (cr *UserHandler) Register(c *gin.Context) {
+
 	// var user domain.Users
 	if err := c.ShouldBindJSON(&user); err != nil {
 		res := response.ErrorResponse(400, "error while getting  the data from user side", err.Error(), user)

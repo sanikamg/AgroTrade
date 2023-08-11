@@ -45,7 +45,7 @@ func (pd *ProductHandler) SalesReport(c *gin.Context) {
 			PageSize: pagesize,
 		},
 	}
-	salesReport,_, _ := pd.productUsecase.SalesReport(c, salesData)
+	salesReport, _, _ := pd.productUsecase.SalesReport(c, salesData)
 	if salesReport == nil {
 		response := response.ErrorResponse(400, "There is no sales report on this period", " ", " ")
 		c.JSON(400, response)
@@ -93,7 +93,7 @@ func (pd *ProductHandler) SalesReport(c *gin.Context) {
 	}
 
 	// Generate a temporary file path for the PDF
-	pdfFilePath := "/home/user/Documents/Project/AgroTrade/salesReport/file.pdf"
+	pdfFilePath := "salesReport/file.pdf"
 
 	// Save the PDF to the temporary file path
 	err = pdf.OutputFileAndClose(pdfFilePath)
