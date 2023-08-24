@@ -20,7 +20,7 @@ func NewServerHTTP(userHandler *handler.UserHandler, adminHandler *handler.Admin
 	engine := gin.New()
 
 	engine.Use(gin.Logger())
-	engine.LoadHTMLGlob("views/*.html")
+	//engine.LoadHTMLGlob("views/*.html")
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// set up routes

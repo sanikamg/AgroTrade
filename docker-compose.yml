@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: agrotrade
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sanika
+    networks:
+      - mynetworks
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    image: agrotrade:latest
+    ports:
+    - 8081:8081
+    restart: on-failure
+    depends_on: 
+      - postgres
+    networks:
+      - mynetworks
+
+
+networks:
+  mynetworks:
+    driver: bridge
+
+
