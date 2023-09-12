@@ -27,6 +27,15 @@ func NewAdminHandler(usecase services.AdminUsecase) *AdminHandler {
 
 var admin domain.AdminDetails
 
+// Admin Signup godoc
+//
+//	@summary		api for admin SignUp
+//	@description	Enter phone number
+//	@tags			SignUp For admin
+//	@Param			inputs	body	req.Phn	true	"Input Field"
+//	@Router			/signup/ [post]
+//	@Success		200	{object}	response.Response{}	"error while sending otp"
+//	@Failure		400	{object}	response.Response{}	"otp send successfully"
 func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 	var admin domain.AdminDetails
 	var phone req.Phn
@@ -49,8 +58,7 @@ func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 }
 
 func (ad *AdminHandler) VerifyOTP(c *gin.Context) {
-	//bind body details
-	//bind body details
+
 	phonenumber := c.Query("phone")
 	code := c.Query("code")
 	// var body req.OtpStruct
