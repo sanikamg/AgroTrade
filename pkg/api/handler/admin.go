@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"golang_project_ecommerce/pkg/api/middlware"
 	"golang_project_ecommerce/pkg/auth"
 	"golang_project_ecommerce/pkg/common/response"
 	"golang_project_ecommerce/pkg/domain"
@@ -57,28 +58,38 @@ func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 
 }
 
+// Verify OTP godoc
+//
+//	@summary		api for Verify otp of user
+//	@description	Enter otp
+//	@tags			SignUp For Admin
+//	@Param			inputs	body	req.OtpStruct{}	true	"Input Field"
+//	@Router			/signup/verify_otp [post]
+//	@Success		200	{object}	response.Response{}	"error while verifying otp"
+//	@Failure		400	{object}	response.Response{}	"otp  successfully verified"
+//
+// verify otp
 func (ad *AdminHandler) VerifyOTP(c *gin.Context) {
 
-	phonenumber := c.Query("phone")
-	code := c.Query("code")
-	// var body req.OtpStruct
-	// if err := c.ShouldBindJSON(&body); err != nil {
-	// 	res := response.ErrorResponse(400, "error while getting otp from user", err.Error(), nil)
-	// 	utils.ResponseJSON(c, res)
-	// 	return
-	// }
+	phonenumber, err := middlware.GetPhn(c, "Signup_Authorization")
+	if err != nil {
+		response := response.ErrorResponse(400, "error while getting id from cookie", err.Error(), phonenumber)
+		c.JSON(400, response)
+		return
+	}
 
-	if phonenumber == " " || code == " " {
-		err := errors.New("please enter otp")
-		res := response.ErrorResponse(400, "invalid otp", err.Error(), nil)
+	var body req.OtpStruct
+	if err := c.ShouldBindJSON(&body); err != nil {
+		res := response.ErrorResponse(400, "error while getting otp from user", err.Error(), nil)
 		utils.ResponseJSON(c, res)
 		return
 	}
+
 	// verifying otp
 
-	err := verification.VerifyOtp("+91"+phonenumber, code)
+	err1 := verification.VerifyOtp("+91"+phonenumber, body.OTP)
 
-	if err != nil {
+	if err1 != nil {
 		res := response.ErrorResponse(400, "error while verifying otp", err.Error(), nil)
 		c.JSON(http.StatusBadRequest, res)
 		return
@@ -107,7 +118,6 @@ func (ad *AdminHandler) AdminLogin(c *gin.Context) {
 	var body req.LoginStruct
 	if err := c.ShouldBindJSON(&body); err != nil {
 		res := response.ErrorResponse(400, "error while getting  the data from user side", err.Error(), body)
-
 		utils.ResponseJSON(c, res)
 		return
 	}
