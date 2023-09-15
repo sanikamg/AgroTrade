@@ -39,19 +39,29 @@ var admin domain.AdminDetails
 //	@Failure		400	{object}	response.Response{}	"otp send successfully"
 func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 	var admin domain.AdminDetails
-	var phone req.Phn
-	if err := c.ShouldBindJSON(&phone); err != nil {
+
+	if err := c.ShouldBindJSON(&admin); err != nil {
 		res := response.ErrorResponse(400, "error while getting admin details", err.Error(), admin)
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
 
-	admin.Phone = phone.Phone
 	if _, err := verification.SendOtp("+91" + admin.Phone); err != nil {
 		res := response.ErrorResponse(400, "error while sending otp", err.Error(), admin)
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
+	//generate tokenstring with jwt
+	tokenString, err := auth.GenerateJWTPhn(admin.Phone)
+	if err != nil {
+		response := response.ErrorResponse(400, "failed to send otp", err.Error(), "user didn't exist")
+
+		c.JSON(400, response)
+		return
+	}
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Signup_Authorization", tokenString["accessToken"], 3600*24*30, "/", " ", false, true)
 
 	response := response.SuccessResponse(200, "otp send successfully", nil)
 	c.JSON(http.StatusOK, response)
