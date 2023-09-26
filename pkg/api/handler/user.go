@@ -45,7 +45,7 @@ func (uh *UserHandler) SendOtpPhn(c *gin.Context) {
 	var user domain.Users
 	var phone req.Phn
 	if err := c.ShouldBindJSON(&phone); err != nil {
-		res := response.ErrorResponse(400, "error while getting admin details", err.Error(), admin)
+		res := response.ErrorResponse(400, "error while getting user details", err.Error(), admin)
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}

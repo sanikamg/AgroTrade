@@ -54,7 +54,7 @@ func (ah *AdminHandler) AdminSignup(c *gin.Context) {
 	//generate tokenstring with jwt
 	tokenString, err := auth.GenerateJWTPhn(admin.Phone)
 	if err != nil {
-		response := response.ErrorResponse(400, "failed to send otp", err.Error(), "user didn't exist")
+		response := response.ErrorResponse(400, "failed to send otp", err.Error(), "ad didn't exist")
 
 		c.JSON(400, response)
 		return
